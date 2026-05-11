@@ -23,7 +23,7 @@
         <h2 class="font-semibold">Detail Perangkat</h2>
         <p class="mt-3 text-slate-700">Perangkat: {{service.device_name}}</p>
         <p class="text-slate-700">Merk: {{service.device_brand}}</p>
-        <p class="text-slate-700">Kategori: {{service.category.category_name}}</p>
+        <p class="text-slate-700">Kategori: {{#if service.device_category_other}}{{service.device_category_other}}{{else}}{{service.device_category}}{{/if}}</p>
       </div>
     </div>
 
@@ -35,14 +35,16 @@
     <div class="rounded-2xl bg-slate-50 p-5">
       <h2 class="font-semibold">History Status</h2>
       <div class="mt-4 space-y-3">
-        {{#each service.service_logs}}
+        {{#each service.histories}}
           <div class="rounded-2xl bg-white p-4 shadow-sm">
             <div class="flex items-center justify-between gap-3">
-              <span class="font-medium capitalized">{{status}}</span>
-              <span class="text-sm text-slate-500">{{formatDate created_at}}</span>
+              <span class="font-medium capitalize">{{status}}</span>
+              <span class="text-sm text-slate-500">{{formatDate createdAt}}</span>
             </div>
             <p class="mt-2 text-slate-600">{{note}}</p>
-            <p class="mt-1 text-xs text-slate-400">Updated by: {{updated_by}}</p>
+            {{#if updated_by}}
+              <p class="mt-1 text-xs text-slate-400">Updated by: {{updated_by}}</p>
+            {{/if}}
           </div>
         {{else}}
           <p class="text-slate-600">Belum ada histori update.</p>
@@ -52,23 +54,14 @@
   </div>
 
   <div class="rounded-3xl bg-white p-8 shadow-sm">
-    <h2 class="text-2xl font-semibold">Update Status Service</h2>
-    <form action="/admin/services/{{service.id}}/status" method="POST" class="mt-6 space-y-6">
-      <div>
-        <label class="block text-sm font-medium text-slate-700">Status</label>
-        <select name="status" class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3">
-          <option value="pending" {{#ifEquals service.status 'pending'}}selected{{/ifEquals}}>pending</option>
-          <option value="checking" {{#ifEquals service.status 'checking'}}selected{{/ifEquals}}>checking</option>
-          <option value="repairing" {{#ifEquals service.status 'repairing'}}selected{{/ifEquals}}>repairing</option>
-          <option value="completed" {{#ifEquals service.status 'completed'}}selected{{/ifEquals}}>completed</option>
-          <option value="cancelled" {{#ifEquals service.status 'cancelled'}}selected{{/ifEquals}}>cancelled</option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-slate-700">Catatan</label>
-        <textarea name="note" rows="4" class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3"></textarea>
-      </div>
-      <button type="submit" class="inline-flex items-center rounded-2xl bg-sky-600 px-6 py-3 text-white hover:bg-sky-500">Update Status</button>
+    <h2 class="text-2xl font-semibold mb-6">Update Status Service</h2>
+    <form action="/services/{{service.id}}/progress" method="GET" class="mb-4">
+      <button type="submit" class="inline-flex items-center rounded-2xl bg-sky-600 px-6 py-3 text-white hover:bg-sky-500 font-semibold">
+        Update Progress →
+      </button>
     </form>
+    <a href="/services/{{service.id}}/history" class="inline-flex items-center rounded-2xl bg-slate-200 px-6 py-3 text-slate-700 hover:bg-slate-300 font-semibold">
+      View Full History
+    </a>
   </div>
 </div>

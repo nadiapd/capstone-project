@@ -6,6 +6,8 @@ router.get('/', Controller.indexPage)
 router.get('/create', Controller.createPage)
 router.post('/store', Controller.store)
 router.get('/:id', Controller.detailPage)
-router.put('/:id/status', Controller.updateStatus)
+router.get('/:id/progress', Controller.progressPage)
+router.post('/:id/progress', Controller.updateStatus)
+router.get('/:id/history', Controller.historyPage)
 
 module.exports = router

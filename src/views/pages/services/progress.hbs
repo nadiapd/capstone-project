@@ -1,0 +1,145 @@
+<div class="space-y-8">
+
+  <div class="rounded-3xl bg-white p-8 shadow-sm">
+
+    <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+
+      <div>
+
+        <h1 class="text-3xl font-semibold">Update Service Progress</h1>
+
+        <p class="text-slate-600 mt-2">Tracking: <span class="font-medium text-sky-600">{{service.tracking_code}}</span></p>
+
+      </div>
+
+      <a
+        href="/services/{{service.id}}"
+        class="text-slate-600 hover:text-slate-800"
+      >
+        ← Back to Detail
+      </a>
+
+    </div>
+
+    <div class="mt-8 grid gap-6 md:grid-cols-2">
+
+      <div class="rounded-2xl bg-slate-50 p-5">
+
+        <h2 class="font-semibold">Service Info</h2>
+
+        <p class="mt-3 text-slate-700">
+          <span class="text-slate-500">Status:</span> <span class="font-semibold capitalize">{{service.status}}</span>
+        </p>
+
+        <p class="mt-2 text-slate-700">
+          <span class="text-slate-500">Customer:</span> {{service.customer.name}}
+        </p>
+
+        <p class="mt-2 text-slate-700">
+          <span class="text-slate-500">Device:</span> {{service.device_name}} / {{service.device_brand}}
+        </p>
+
+        <p class="mt-2 text-slate-700">
+          <span class="text-slate-500">Category:</span> {{#if service.device_category_other}}{{service.device_category_other}}{{else}}{{service.device_category}}{{/if}}
+        </p>
+
+      </div>
+
+      <div class="rounded-2xl bg-slate-50 p-5">
+
+        <h2 class="font-semibold">Latest Update</h2>
+
+        {{#if service.histories}}
+
+          {{#with (lookup service.histories (minus service.histories.length 1))}}
+
+            <p class="mt-3 text-slate-700">
+              <span class="text-slate-500">Status:</span> <span class="font-semibold capitalize">{{status}}</span>
+            </p>
+
+            <p class="mt-2 text-slate-700">
+              <span class="text-slate-500">Note:</span> {{note}}
+            </p>
+
+            <p class="mt-2 text-slate-600 text-sm">
+              Updated by: {{updated_by}}
+            </p>
+
+          {{/with}}
+
+        {{else}}
+
+          <p class="mt-3 text-slate-600">Belum ada update</p>
+
+        {{/if}}
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="rounded-3xl bg-white p-8 shadow-sm">
+
+    <h2 class="text-2xl font-semibold mb-6">Update Status & Catatan</h2>
+
+    <form action="/services/{{service.id}}/progress" method="POST" class="space-y-6">
+
+      <div>
+
+        <label class="block text-sm font-medium text-slate-700 mb-2">
+          Status Baru
+        </label>
+
+        <select
+          name="status"
+          class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3"
+        >
+          <option value="">-- Pilih Status --</option>
+          <option value="pending" {{#ifEquals service.status 'pending'}}selected{{/ifEquals}}>Pending</option>
+          <option value="checking" {{#ifEquals service.status 'checking'}}selected{{/ifEquals}}>Checking</option>
+          <option value="repairing" {{#ifEquals service.status 'repairing'}}selected{{/ifEquals}}>Repairing</option>
+          <option value="completed" {{#ifEquals service.status 'completed'}}selected{{/ifEquals}}>Completed</option>
+          <option value="cancelled" {{#ifEquals service.status 'cancelled'}}selected{{/ifEquals}}>Cancelled</option>
+        </select>
+
+      </div>
+
+      <div>
+
+        <label class="block text-sm font-medium text-slate-700 mb-2">
+          Catatan Progress
+        </label>
+
+        <textarea
+          name="note"
+          rows="5"
+          class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3"
+          placeholder="Deskripsikan apa yang telah dikerjakan atau status terbaru..."
+        ></textarea>
+
+      </div>
+
+      <div class="flex gap-3">
+
+        <button
+          type="submit"
+          class="inline-flex items-center rounded-2xl bg-sky-600 px-6 py-3 text-white hover:bg-sky-500 font-semibold"
+        >
+          Update Progress
+        </button>
+
+        <a
+          href="/services/{{service.id}}/history"
+          class="inline-flex items-center rounded-2xl bg-slate-200 px-6 py-3 text-slate-700 hover:bg-slate-300 font-semibold"
+        >
+          View History
+        </a>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

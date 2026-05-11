@@ -20,10 +20,49 @@ exports.search = async (req, res) => {
 
   try {
 
+    const tracking_code = req.query.tracking_code
+    const email = req.query.email
+    const phone = req.query.phone
+
+    if (!tracking_code || (!email && !phone)) {
+      return Render.view(
+        res,
+        'pages/tracking/search',
+        {
+          title: 'Tracking Service',
+          layout: 'public',
+          error: 'Tracking code dan email atau nomor HP wajib diisi.',
+          old: {
+            tracking_code,
+            email,
+            phone
+          }
+        }
+      )
+    }
+
     const service =
       await TrackingService.search(
-        req.query.tracking_code
+        tracking_code,
+        { email, phone }
       )
+
+    if (!service) {
+      return Render.view(
+        res,
+        'pages/tracking/search',
+        {
+          title: 'Tracking Service',
+          layout: 'public',
+          error: 'Tracking code tidak ditemukan atau data kontak tidak sesuai.',
+          old: {
+            tracking_code,
+            email,
+            phone
+          }
+        }
+      )
+    }
 
     return Render.view(
       res,
@@ -39,9 +78,19 @@ exports.search = async (req, res) => {
 
     console.log(err)
 
-    return Render.redirect(
+    return Render.view(
       res,
-      '/tracking'
+      'pages/tracking/search',
+      {
+        title: 'Tracking Service',
+        layout: 'public',
+        error: 'Terjadi kesalahan saat mencari tracking.',
+        old: {
+          tracking_code: req.query.tracking_code,
+          email: req.query.email,
+          phone: req.query.phone
+        }
+      }
     )
   }
 }

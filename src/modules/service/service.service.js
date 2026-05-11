@@ -1,7 +1,11 @@
+const { Op } = require('sequelize')
+
 const Model =
   require('./service.model')
 
 const CustomerModel = require('../customer/customer.model')
+const HistoryModel = require('../service_history/service_history.model')
+const HistoryService = require('../service_history/service_history.service')
 
 const TrackingHelper =
   require('../../helpers/tracking.helper')
@@ -14,6 +18,21 @@ Model.belongsTo(
   }
 )
 
+Model.hasMany(
+  HistoryModel,
+  {
+    foreignKey: 'service_id',
+    as: 'histories'
+  }
+)
+
+HistoryModel.belongsTo(
+  Model,
+  {
+    foreignKey: 'service_id',
+    as: 'service'
+  }
+)
 
 exports.getAll = async () => {
 
@@ -29,23 +48,49 @@ exports.getAll = async () => {
 exports.getById = async id => {
 
   return await Model.findByPk(id, {
-    include: [{
-      model: CustomerModel,
-      as: 'customer'
-    }]
+    include: [
+      {
+        model: CustomerModel,
+        as: 'customer'
+      },
+      {
+        model: HistoryModel,
+        as: 'histories'
+      }
+    ],
+    order: [
+      [{ model: HistoryModel, as: 'histories' }, 'createdAt', 'ASC']
+    ]
   })
 }
 
 exports.store = async payload => {
-console.log(payload)
+
   // Create or find customer
-  let customer = await CustomerModel.findOne({
-    where: {
-      name: payload.customer_name,
-      email: payload.customer_email || null,
-      phone: payload.customer_phone || null
-    }
-  })
+  let customer = null
+
+  if (payload.customer_email || payload.customer_phone) {
+    customer = await CustomerModel.findOne({
+      where: {
+        [Op.or]: [
+          payload.customer_email
+            ? { email: payload.customer_email }
+            : null,
+          payload.customer_phone
+            ? { phone: payload.customer_phone }
+            : null
+        ].filter(Boolean)
+      }
+    })
+  }
+
+  if (!customer && payload.customer_name) {
+    customer = await CustomerModel.findOne({
+      where: {
+        name: payload.customer_name
+      }
+    })
+  }
 
   if (!customer) {
     customer = await CustomerModel.create({
@@ -69,15 +114,28 @@ console.log(payload)
 
 exports.updateStatus = async (
   id,
-  status
+  status,
+  note,
+  updatedBy
 ) => {
 
   const service =
     await Model.findByPk(id)
 
+  if (!service) {
+    throw new Error('Service not found')
+  }
+
   service.status = status
 
   await service.save()
+
+  await HistoryService.store({
+    service_id: id,
+    status,
+    note,
+    updated_by: updatedBy || 'Admin'
+  })
 
   return service
 }
