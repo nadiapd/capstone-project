@@ -34,12 +34,21 @@ const Service = sequelize.define('services', {
   device_brand: {
     type: Sequelize.STRING(255)
   },
-  complaint: {
+  note: {
     type: Sequelize.TEXT
   },
+  /**
+   * Status Service:
+   * 1 = Baru (Antrean masuk)
+   * 2 = Proses (Sedang dikerjakan teknisi)
+   * 3 = Siap Ambil (Selesai diperbaiki, menunggu pelanggan)
+   * 4 = Selesai (Sudah diambil & dibayar)
+   * 5 = Dibatalkan (Tidak jadi servis/tidak bisa diperbaiki)
+   */
   status: {
-    type: Sequelize.STRING(50),
-    defaultValue: 'pending'
+    type: Sequelize.INTEGER,
+    defaultValue: 1,
+    comment: '1:Baru, 2:Proses, 3:Siap Ambil, 4:Selesai, 5:Dibatalkan'
   }
 })
 

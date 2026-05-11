@@ -5,7 +5,7 @@ const Render =
   require('../../helpers/render.helper')
 
 exports.indexPage = async (req, res) => {
-
+  
   try {
 
     const analytics =
@@ -17,6 +17,7 @@ exports.indexPage = async (req, res) => {
       {
         title: 'Dashboard',
         layout: 'main',
+        adminName: req.admin.name,
         ...analytics
       }
     )

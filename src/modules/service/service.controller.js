@@ -4,44 +4,34 @@ const Validation =
 const Service =
   require('./service.service')
 
+const HistoryService =
+  require('../service_history/service_history.service')
+
 const Render =
   require('../../helpers/render.helper')
 
 const Helper =
   require('./service.helper')
 
+const HistoryHelper =
+  require('../service_history/service_history.helper')
+
 exports.indexPage = async (req, res) => {
-
   try {
-
-    const services =
-      await Service.getAll()
-
-    const result =
-      Helper.getServices(
-        services
-      )
-console.log(services)
-    return Render.view(
-      res,
-      'pages/services/list',
-      {
-        title: 'Services',
-        layout: 'main',
-        services: result
-      }
-    )
-
+    const filters = req.query || {};
+    const services = await Service.getAll(filters);
+    const result = services ? Helper.getServices(services) : [];
+    return Render.view(res, 'pages/services/list', {
+      title: 'Services',
+      layout: 'main',
+      services: result,
+      query: filters
+    });
   } catch (err) {
-
-    console.log(err)
-
-    return Render.redirect(
-      res,
-      '/dashboard'
-    )
+    console.log(err);
+    return Render.redirect(res, '/dashboard');
   }
-}
+};
 
 exports.createPage = async (req, res) => {
 
@@ -113,13 +103,15 @@ exports.detailPage = async (req, res) => {
     const service =
       await Service.getById(req.params.id)
 
+    const result = service ? Helper.getServiceDetail(service) : null
+
     return Render.view(
       res,
       'pages/services/detail',
       {
         title: 'Service Detail',
         layout: 'main',
-        service
+        service: result
       }
     )
 
@@ -134,9 +126,6 @@ exports.detailPage = async (req, res) => {
   }
 }
 
-const HistoryService =
-  require('../service_history/service_history.service')
-
 exports.updateStatus = async (req, res) => {
 
   try {
@@ -145,7 +134,7 @@ exports.updateStatus = async (req, res) => {
       req.params.id,
       req.body.status,
       req.body.note,
-      req.admin?.name || 'Admin'
+      req.admin?.name || 'System'
     )
 
     return Render.redirect(
@@ -218,6 +207,8 @@ exports.historyPage = async (req, res) => {
         req.params.id
       )
 
+    const result = histories ? HistoryHelper.getHistories(histories) : []
+
     return Render.view(
       res,
       'pages/services/history',
@@ -225,7 +216,7 @@ exports.historyPage = async (req, res) => {
         title: 'Service History',
         layout: 'main',
         service,
-        histories
+        histories: result
       }
     )
 

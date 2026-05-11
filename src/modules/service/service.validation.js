@@ -9,7 +9,7 @@ exports.store = body => {
     device_category: 'required|in:laptop,smartphone,printer,monitor,televisi,lainnya',
     device_category_other: 'string|max:255',
     device_name: 'required',
-    complaint: 'required'
+    note: 'required'
   }
 
   const messages = {

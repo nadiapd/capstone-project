@@ -1,67 +1,215 @@
-<div class="space-y-8">
-  <div class="rounded-3xl bg-white p-8 shadow-sm">
-    <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-      <div>
-        <h1 class="text-3xl font-semibold">Detail Service</h1>
-        <p class="text-slate-600">Tracking code: <span class="font-medium text-sky-600">{{service.tracking_code}}</span></p>
-      </div>
-      <span class="inline-flex items-center rounded-full bg-slate-100 px-4 py-2 text-sm capitalize">{{service.status}}</span>
+<div class="max-w-5xl mx-auto">
+  {{!-- Header Section Tetap Sama --}}
+  <div class="flex justify-between items-center mb-8">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Detail Servis</h2>
+      <a href="/services"
+        class="text-slate-400 hover:text-blue-600 text-sm font-bold transition-colors flex items-center gap-2 group">
+        <span class="group-hover:-translate-x-1 transition-transform">←</span> Kembali ke Daftar
+      </a>
     </div>
-
-    {{#if error}}
-      <div class="mt-5 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700">{{error}}</div>
-    {{/if}}
-
-    <div class="mt-6 grid gap-6 md:grid-cols-2">
-      <div class="rounded-2xl bg-slate-50 p-5">
-        <h2 class="font-semibold">Data Customer</h2>
-        <p class="mt-3 text-slate-700">Nama: {{service.customer.name}}</p>
-        <p class="text-slate-700">Email: {{service.customer.email}}</p>
-        <p class="text-slate-700">Phone: {{service.customer.phone}}</p>
-      </div>
-      <div class="rounded-2xl bg-slate-50 p-5">
-        <h2 class="font-semibold">Detail Perangkat</h2>
-        <p class="mt-3 text-slate-700">Perangkat: {{service.device_name}}</p>
-        <p class="text-slate-700">Merk: {{service.device_brand}}</p>
-        <p class="text-slate-700">Kategori: {{#if service.device_category_other}}{{service.device_category_other}}{{else}}{{service.device_category}}{{/if}}</p>
-      </div>
+    <div class="flex gap-2">
+      <span
+        class="px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest {{service.status_color}} shadow-sm border border-white/20">
+        {{service.status_label}}
+      </span>
     </div>
+  </div>
 
-    <div class="rounded-2xl bg-slate-50 p-5">
-      <h2 class="font-semibold">Deskripsi Kerusakan</h2>
-      <p class="mt-3 text-slate-700">{{service.complaint}}</p>
-    </div>
+  {{!-- Main Info Card --}}
+  <div class="bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden mb-8">
+    <div class="p-8 md:p-10">
+      {{!-- Meta Data Row --}}
+      <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-10 pb-10 border-b border-slate-50">
+        <div>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Tracking ID</p>
+          <span class="font-mono text-xl font-black text-blue-600 bg-blue-50 px-4 py-2 rounded-xl">
+            #{{service.tracking_code}}
+          </span>
+        </div>
+        <div class="md:text-right">
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Waktu Pendaftaran</p>
+          <p class="text-slate-700 font-bold text-lg">{{formatDate service.created_at}}</p>
+        </div>
+      </div>
 
-    <div class="rounded-2xl bg-slate-50 p-5">
-      <h2 class="font-semibold">History Status</h2>
-      <div class="mt-4 space-y-3">
-        {{#each service.histories}}
-          <div class="rounded-2xl bg-white p-4 shadow-sm">
-            <div class="flex items-center justify-between gap-3">
-              <span class="font-medium capitalize">{{status}}</span>
-              <span class="text-sm text-slate-500">{{formatDate createdAt}}</span>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        {{!-- Data Customer --}}
+        <div>
+          <h3 class="flex items-center gap-2 text-blue-600 text-sm font-black uppercase tracking-widest mb-6">
+            <span class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-xs">👤</span>
+            Informasi Pelanggan
+          </h3>
+          <div class="space-y-5">
+            <div class="flex flex-col gap-1">
+              <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Nama Pelanggan</span>
+              <p class="text-slate-900 font-extrabold text-base">{{service.customer_name}}</p>
             </div>
-            <p class="mt-2 text-slate-600">{{note}}</p>
-            {{#if updated_by}}
-              <p class="mt-1 text-xs text-slate-400">Updated by: {{updated_by}}</p>
-            {{/if}}
+            <div class="flex flex-col gap-1">
+              <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Email Address</span>
+              <p class="text-slate-700 font-semibold">{{service.customer_email}}</p>
+            </div>
+            <div class="flex flex-col gap-1">
+              <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Nomor WhatsApp</span>
+              <p class="text-slate-700 font-semibold">{{service.customer_phone}}</p>
+            </div>
           </div>
-        {{else}}
-          <p class="text-slate-600">Belum ada histori update.</p>
-        {{/each}}
+        </div>
+
+        {{!-- Detail Perangkat --}}
+        <div>
+          <h3 class="flex items-center gap-2 text-blue-600 text-sm font-black uppercase tracking-widest mb-6">
+            <span class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-xs">💻</span>
+            Spesifikasi Unit
+          </h3>
+          <div class="space-y-4">
+            {{!-- <div class="flex justify-between items-center pb-3 border-b border-slate-200/60">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Brand Perangkat</span>
+              <span class="text-sm text-slate-900 font-black uppercase">{{service.device_brand}}</span>
+            </div> --}}
+            <div class="flex justify-between items-center pb-3 border-b border-slate-200/60">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Nama Perangkat</span>
+              <span class="text-sm text-slate-900 font-bold">{{service.device_name}}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Kategori</span>
+              <span
+                class="px-3 py-1 bg-blue-600 text-white text-[10px] rounded-md font-black uppercase shadow-sm shadow-blue-200">
+                {{service.device_category}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Deskripsi Kerusakan --}}
+      <div class="mt-12 pt-8 border-t border-slate-50">
+        <h3 class="flex items-center gap-2 text-blue-600 text-sm font-black uppercase tracking-widest mb-6">
+          <span class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-xs">📝</span>
+          Deskripsi Kerusakan
+        </h3>
+        <div class="bg-blue-50/30 border border-blue-100/50 rounded-xl p-6">
+          <p class="text-slate-700 leading-relaxed">
+            {{service.note}}
+          </p>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="rounded-3xl bg-white p-8 shadow-sm">
-    <h2 class="text-2xl font-semibold mb-6">Update Status Service</h2>
-    <form action="/services/{{service.id}}/progress" method="GET" class="mb-4">
-      <button type="submit" class="inline-flex items-center rounded-2xl bg-sky-600 px-6 py-3 text-white hover:bg-sky-500 font-semibold">
-        Update Progress →
-      </button>
-    </form>
-    <a href="/services/{{service.id}}/history" class="inline-flex items-center rounded-2xl bg-slate-200 px-6 py-3 text-slate-700 hover:bg-slate-300 font-semibold">
-      View Full History
-    </a>
+  {{!-- Action Card Tetap Sama --}}
+  <div class="bg-slate-900 rounded-2xl p-8 md:p-10 shadow-2xl shadow-blue-900/20 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+    <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div>
+        <h3 class="text-white text-xl font-bold">Update Progres Unit</h3>
+        <p class="text-slate-400 text-sm">Informasikan status perbaikan terbaru kepada pemilik unit.</p>
+      </div>
+      <div class="flex gap-3 w-full md:w-auto">
+        <a href="/services/{{service.id}}/history"
+          class="flex-1 md:flex-none text-center px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold text-sm transition-all border border-slate-700">
+          Riwayat
+        </a>
+        <button onclick="openModalUpdate()"
+          class="flex-1 md:flex-none px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-600/30 transition-all">
+          Update Progress →
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="updateStatusModal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div
+        class="relative bg-white w-full max-w-lg rounded-[2rem] shadow-2xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300"
+        id="modalContainer">
+
+        <div class="p-8 pb-4 flex justify-between items-start">
+          <div>
+            <h3 class="text-xl font-black text-slate-900">Update Progress</h3>
+            <p class="text-xs text-slate-400 mt-1 font-medium italic">Tracking: #{{service.tracking_code}}</p>
+          </div>
+          <button onclick="closeModalUpdate()"
+            class="text-slate-400 hover:text-red-500 transition-colors text-2xl">&times;</button>
+        </div>
+
+        <form id="update-service-form" action="/services/{{service.id}}/update" method="POST" class="p-8 pt-4">
+          <div class="space-y-6">
+            {{!-- Pilih Status --}}
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Pilih Status
+                Terbaru <span class="text-red-600">*</span></label>
+              <select name="status" rules="required" fieldname="Status" required
+                class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
+                <option value="1" {{#if (eq service.status 1)}}{{/if}} disabled>Baru (Unit Masuk)</option>
+                <option value="2" {{#if (eq service.status 2)}}selected{{/if}}>Proses Perbaikan</option>
+                <option value="3" {{#if (eq service.status 3)}}selected{{/if}}>Siap Ambil (Selesai)</option>
+                <option value="4" {{#if (eq service.status 4)}}selected{{/if}}>Sudah Diambil (Arsip)</option>
+                <option value="5" {{#if (eq service.status 5)}}selected{{/if}}>Dibatalkan</option>
+              </select>
+            </div>
+
+            {{!-- Catatan / Note --}}
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Catatan
+                Pengerjaan (Optional) <span class="text-red-600">*</span></label>
+              <textarea rules="required" fieldname="Catatan Pengerjaan" name="note" rows="3" placeholder="Contoh: Penggantian LCD selesai, sedang tahap testing..."
+                class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all resize-none"></textarea>
+            </div>
+          </div>
+
+          {{!-- Tombol Aksi --}}
+          <div class="mt-8 flex gap-3">
+            <button type="button" onclick="closeModalUpdate()"
+              class="flex-1 px-6 py-3 bg-slate-100 text-slate-500 rounded-xl font-bold text-sm hover:bg-slate-200 transition-all">
+              Batal
+            </button>
+            <button type="submit"
+              class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all">
+              Simpan Perubahan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
+<script>
+    const modal = document.getElementById('updateStatusModal');
+    const container = document.getElementById('modalContainer');
+
+    function openModalUpdate() {
+        modal.classList.remove('hidden');
+        // Delay sedikit agar animasi transition scale & opacity berjalan
+        setTimeout(() => {
+            container.classList.remove('scale-95', 'opacity-0');
+            container.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeModalUpdate() {
+        container.classList.remove('scale-100', 'opacity-100');
+        container.classList.add('scale-95', 'opacity-0');
+        
+        // Sembunyikan modal setelah animasi selesai (300ms)
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    // Tutup modal jika user klik di area luar modal (backdrop)
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModalUpdate();
+        }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+    if (window.history.replaceState) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('message');
+        window.history.replaceState({path: url.href}, '', url.href);
+    }
+    initLiveValidation('#update-service-form');
+  });
+</script>

@@ -34,14 +34,51 @@ HistoryModel.belongsTo(
   }
 )
 
-exports.getAll = async () => {
+exports.getAll = async (filters = {}) => {
+  let whereCondition = {}
+
+  // 1. Filter Kategori
+  if (filters.category && filters.category !== '') {
+    whereCondition.device_category = filters.category
+  }
+
+  // 2. Filter Status
+  if (filters.status && filters.status !== '') {
+    whereCondition.status = parseInt(filters.status)
+  }
+
+  // 3. Filter Pencarian Global (q)
+  if (filters.q && filters.q !== '') {
+    whereCondition[Op.or] = [
+      { tracking_code: { [Op.like]: `%${filters.q}%` } },
+      { device_brand: { [Op.like]: `%${filters.q}%` } },
+      { '$customer.name$': { [Op.like]: `%${filters.q}%` } }
+    ]
+  }
+
+  // --- LOGIKA SORTING DINAMIS ---
+  // Default sorting jika tidak ada parameter sortBy
+  let orderClause = [['createdAt', 'DESC']]
+
+  // List kolom yang diizinkan untuk di-sort (White-list untuk keamanan)
+  const allowedSortFields = ['tracking_code', 'status', 'createdAt', 'updatedAt']
+
+  if (filters.sortBy && allowedSortFields.includes(filters.sortBy)) {
+    // Tentukan arah: ASC atau DESC (default DESC)
+    const direction = filters.sortOrder === 'ASC' ? 'ASC' : 'DESC'
+    orderClause = [[filters.sortBy, direction]]
+  }
 
   return await Model.findAll({
-    include: [{
-      model: CustomerModel,
-      as: 'customer'
-    }],
-    order: [['id', 'DESC']]
+    where: whereCondition,
+    include: [
+      {
+        model: CustomerModel,
+        as: 'customer',
+        required: false
+      }
+    ],
+    order: orderClause // Gunakan variabel orderClause yang dinamis
   })
 }
 
@@ -102,7 +139,7 @@ exports.store = async payload => {
 
   payload.customer_id = customer.id
   payload.tracking_code = TrackingHelper.generateTrackingCode()
-  payload.status = 'pending'
+  payload.status = 1
 
   // Remove customer fields from payload
   delete payload.customer_name

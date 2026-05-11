@@ -21,28 +21,33 @@ const app = express()
 
 const hbs = require('hbs')
 
-hbs.registerHelper('formatDate', (value) => {
-  if (!value) return '-'
-  return new Date(value).toLocaleDateString('id-ID', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-})
+// hbs.registerHelper('formatDate', (value) => {
+//   if (!value) return '-'
+//   return new Date(value).toLocaleDateString('id-ID', {
+//     year: 'numeric',
+//     month: 'long',
+//     day: 'numeric',
+//     hour: '2-digit',
+//     minute: '2-digit'
+//   })
+// })
 
-hbs.registerHelper('ifEquals', function (a, b, options) {
-  return a == b ? options.fn(this) : options.inverse(this)
-})
+// hbs.registerHelper('ifEquals', function (a, b, options) {
+//   return a == b ? options.fn(this) : options.inverse(this)
+// })
 
-hbs.registerHelper('minus', function (a, b) {
-  return a - b
-})
+// hbs.registerHelper('minus', function (a, b) {
+//   return a - b
+// })
 
-hbs.registerHelper('lookup', function (obj, index) {
-  return obj ? obj[index] : undefined
-})
+// hbs.registerHelper('lookup', function (obj, index) {
+//   return obj ? obj[index] : undefined
+// })
+
+// hbs.registerHelper('eq', function (a, b) {
+//   // return String(a) === String(b);
+//   return String(a || '') === String(b || '');
+// });
 
 /**
  * Handlebars Engine
@@ -53,10 +58,43 @@ app.engine(
   engine({
     extname: '.hbs',
     defaultLayout: 'main',
-    layoutsDir: path.join(
-      __dirname,
-      'views/layouts'
-    )
+    layoutsDir: path.join(__dirname, 'views/layouts'),
+
+    helpers: {
+      formatDate(value) {
+        if (!value) return '-'
+
+        return new Date(value).toLocaleDateString('id-ID', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      },
+
+      ifEquals(a, b, options) {
+        return a == b
+          ? options.fn(this)
+          : options.inverse(this)
+      },
+
+      minus(a, b) {
+        return a - b
+      },
+
+      lookup(obj, index) {
+        return obj ? obj[index] : undefined
+      },
+
+      eq(a, b) {
+        return String(a || '') === String(b || '')
+      },
+      
+      isEven (idx) {
+        return idx % 2 === 0
+      }
+    }
   })
 )
 
