@@ -15,23 +15,16 @@ const seedAdmin = async () => {
     })
 
     if (existingAdmin) {
-      console.log('Admin sudah ada dengan email: admin@gmail.com')
       process.exit(0)
     }
 
-    // Create initial admin
-    const admin = await AdminService.store({
+    await AdminService.store({
       name: 'Administrator',
       email: 'admin@gmail.com',
       password: 'admin123'
     })
-
-    console.log('✅ Admin berhasil dibuat!')
-    console.log('Email: admin@gmail.com')
-    console.log('Password: admin123')
     process.exit(0)
-  } catch (err) {
-    console.error('❌ Error:', err.message)
+  } catch {
     process.exit(1)
   }
 }

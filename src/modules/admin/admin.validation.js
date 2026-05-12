@@ -1,7 +1,6 @@
 const Validator = require('validatorjs')
 
 exports.store = payload => {
-
   const rules = {
     name: 'required|string|max:255',
     email: 'required|email|max:255',
@@ -12,7 +11,6 @@ exports.store = payload => {
 }
 
 exports.update = payload => {
-
   const rules = {
     name: 'required|string|max:255',
     email: 'required|email|max:255',

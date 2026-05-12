@@ -1,7 +1,7 @@
 const Helper = require('../service/service.helper')
 
 const getHistories = (histories) => {
-  if (!histories) return [];
+  if (!histories) return []
 
   return histories.map(h => ({
     status_label: Helper.formatStatus[h.status] || 'Unknown',
@@ -9,9 +9,8 @@ const getHistories = (histories) => {
     note: h.note,
     updated_by: h.updated_by,
     created_at: h.createdAt
-  }));
-};
-
+  }))
+}
 
 module.exports = {
   getHistories

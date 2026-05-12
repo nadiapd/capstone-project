@@ -1,14 +1,10 @@
 const { Op } = require('sequelize')
 
-const Model =
-  require('./service.model')
-
+const Model = require('./service.model')
 const CustomerModel = require('../customer/customer.model')
 const HistoryModel = require('../service_history/service_history.model')
 const HistoryService = require('../service_history/service_history.service')
-
-const TrackingHelper =
-  require('../../helpers/tracking.helper')
+const TrackingHelper = require('../../helpers/tracking.helper')
 
 Model.belongsTo(
   CustomerModel,
@@ -37,17 +33,14 @@ HistoryModel.belongsTo(
 exports.getAll = async (filters = {}) => {
   let whereCondition = {}
 
-  // 1. Filter Kategori
   if (filters.category && filters.category !== '') {
     whereCondition.device_category = filters.category
   }
 
-  // 2. Filter Status
   if (filters.status && filters.status !== '') {
     whereCondition.status = parseInt(filters.status)
   }
 
-  // 3. Filter Pencarian Global (q)
   if (filters.q && filters.q !== '') {
     whereCondition[Op.or] = [
       { tracking_code: { [Op.like]: `%${filters.q}%` } },
@@ -56,15 +49,11 @@ exports.getAll = async (filters = {}) => {
     ]
   }
 
-  // --- LOGIKA SORTING DINAMIS ---
-  // Default sorting jika tidak ada parameter sortBy
   let orderClause = [['createdAt', 'DESC']]
 
-  // List kolom yang diizinkan untuk di-sort (White-list untuk keamanan)
   const allowedSortFields = ['tracking_code', 'status', 'createdAt', 'updatedAt']
 
   if (filters.sortBy && allowedSortFields.includes(filters.sortBy)) {
-    // Tentukan arah: ASC atau DESC (default DESC)
     const direction = filters.sortOrder === 'ASC' ? 'ASC' : 'DESC'
     orderClause = [[filters.sortBy, direction]]
   }
@@ -78,12 +67,11 @@ exports.getAll = async (filters = {}) => {
         required: false
       }
     ],
-    order: orderClause // Gunakan variabel orderClause yang dinamis
+    order: orderClause
   })
 }
 
 exports.getById = async id => {
-
   return await Model.findByPk(id, {
     include: [
       {
@@ -102,8 +90,6 @@ exports.getById = async id => {
 }
 
 exports.store = async payload => {
-
-  // Create or find customer
   let customer = null
 
   if (payload.customer_email || payload.customer_phone) {
@@ -141,7 +127,6 @@ exports.store = async payload => {
   payload.tracking_code = TrackingHelper.generateTrackingCode()
   payload.status = 1
 
-  // Remove customer fields from payload
   delete payload.customer_name
   delete payload.customer_email
   delete payload.customer_phone
@@ -156,8 +141,7 @@ exports.updateStatus = async (
   updatedBy
 ) => {
 
-  const service =
-    await Model.findByPk(id)
+  const service = await Model.findByPk(id)
 
   if (!service) {
     throw new Error('Service not found')

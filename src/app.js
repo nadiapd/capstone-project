@@ -15,44 +15,7 @@ const routes = require('./routes')
 
 const app = express()
 
-/**
- * Handlebars Helpers
- */
-
-const hbs = require('hbs')
-
-// hbs.registerHelper('formatDate', (value) => {
-//   if (!value) return '-'
-//   return new Date(value).toLocaleDateString('id-ID', {
-//     year: 'numeric',
-//     month: 'long',
-//     day: 'numeric',
-//     hour: '2-digit',
-//     minute: '2-digit'
-//   })
-// })
-
-// hbs.registerHelper('ifEquals', function (a, b, options) {
-//   return a == b ? options.fn(this) : options.inverse(this)
-// })
-
-// hbs.registerHelper('minus', function (a, b) {
-//   return a - b
-// })
-
-// hbs.registerHelper('lookup', function (obj, index) {
-//   return obj ? obj[index] : undefined
-// })
-
-// hbs.registerHelper('eq', function (a, b) {
-//   // return String(a) === String(b);
-//   return String(a || '') === String(b || '');
-// });
-
-/**
- * Handlebars Engine
- */
-
+// Handlebars Engine
 app.engine(
   'hbs',
   engine({
@@ -91,7 +54,7 @@ app.engine(
         return String(a || '') === String(b || '')
       },
       
-      isEven (idx) {
+      isEven(idx) {
         return idx % 2 === 0
       }
     }
@@ -105,10 +68,7 @@ app.set(
   path.join(__dirname, 'views')
 )
 
-/**
- * Middleware
- */
-
+// Middleware
 app.use(logger('dev'))
 
 app.use(express.json())
@@ -135,25 +95,16 @@ app.use(
   })
 )
 
-/**
- * Routes
- */
-
+// Routes
 app.use(routes)
 
-/**
- * 404
- */
-
+// 404 Handler
 app.use((req, res, next) => {
   next(createError(404))
 })
 
-/**
- * Error Handler
- */
-
-app.use((err, req, res, next) => {
+// Error Handler
+app.use((err, req, res) => {
 
   if (err.status === 404) {
 

@@ -1,18 +1,10 @@
-const Validation =
-  require('./admin.validation')
-
-const Service =
-  require('./admin.service')
-
-const Render =
-  require('../../helpers/render.helper')
+const Validation = require('./admin.validation')
+const Service = require('./admin.service')
+const Render = require('../../helpers/render.helper')
 
 exports.indexPage = async (req, res) => {
-
   try {
-
-    const admins =
-      await Service.getAll()
+    const admins = await Service.getAll()
 
     return Render.view(
       res,
@@ -23,11 +15,7 @@ exports.indexPage = async (req, res) => {
         admins
       }
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/dashboard'
@@ -36,9 +24,7 @@ exports.indexPage = async (req, res) => {
 }
 
 exports.createPage = async (req, res) => {
-
   try {
-
     return Render.view(
       res,
       'pages/admins/create',
@@ -48,10 +34,7 @@ exports.createPage = async (req, res) => {
       }
     )
 
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/admins'
@@ -60,14 +43,10 @@ exports.createPage = async (req, res) => {
 }
 
 exports.store = async (req, res) => {
-
   try {
-
-    const validation =
-      Validation.store(req.body)
+    const validation = Validation.store(req.body)
 
     if (validation.fails()) {
-
       return Render.view(
         res,
         'pages/admins/create',
@@ -87,10 +66,7 @@ exports.store = async (req, res) => {
       '/admins'
     )
 
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.view(
       res,
       'pages/admins/create',
@@ -105,14 +81,10 @@ exports.store = async (req, res) => {
 }
 
 exports.editPage = async (req, res) => {
-
   try {
-
-    const admin =
-      await Service.getById(req.params.id)
+    const admin = await Service.getById(req.params.id)
 
     if (!admin) {
-
       return Render.redirect(
         res,
         '/admins'
@@ -129,10 +101,7 @@ exports.editPage = async (req, res) => {
       }
     )
 
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/admins'
@@ -141,16 +110,11 @@ exports.editPage = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
-
   try {
-
-    const validation =
-      Validation.update(req.body)
+    const validation = Validation.update(req.body)
 
     if (validation.fails()) {
-
-      const admin =
-        await Service.getById(req.params.id)
+      const admin = await Service.getById(req.params.id)
 
       return Render.view(
         res,
@@ -172,12 +136,8 @@ exports.update = async (req, res) => {
       '/admins'
     )
 
-  } catch (err) {
-
-    console.log(err)
-
-    const admin =
-      await Service.getById(req.params.id)
+  } catch {
+    const admin = await Service.getById(req.params.id)
 
     return Render.view(
       res,
@@ -194,9 +154,7 @@ exports.update = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-
   try {
-
     await Service.delete(req.params.id)
 
     return Render.redirect(
@@ -204,10 +162,7 @@ exports.delete = async (req, res) => {
       '/admins'
     )
 
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/admins'

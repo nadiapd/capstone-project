@@ -1,19 +1,7 @@
-// const webRoutes = require('./web.route')
-// const apiRoutes = require('./api.route')
-
-// module.exports = {
-//   webRoutes,
-//   apiRoutes
-// }
-
 const router = require('express').Router()
-
 const authMiddleware = require('../middlewares/auth.middleware')
 
-/**
- * Public Routes
- */
-
+// Public Routes
 router.use(
   '/',
   require('../modules/tracking/tracking.route')
@@ -24,10 +12,7 @@ router.use(
   require('../modules/auth/auth.route')
 )
 
-/**
- * Protected Routes
- */
-
+// Protected Routes
 router.use(
   '/dashboard',
   authMiddleware,
@@ -51,11 +36,5 @@ router.use(
   authMiddleware,
   require('../modules/admin/admin.route')
 )
-
-// router.use(
-//   '/categories',
-//   authMiddleware,
-//   require('../modules/category/category.route')
-// )
 
 module.exports = router

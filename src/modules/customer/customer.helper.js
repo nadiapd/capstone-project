@@ -1,34 +1,22 @@
 const getCustomers = customers => {
-
   const result = []
 
-  Object.values(customers).forEach(
-    (
-      customer,
-      index
-    ) => {
+  Object.values(customers).forEach((customer, index) => {
+    const obj = {}
 
-      const obj = {}
+    obj.id = customer.id
+    obj.name = customer.name
+    obj.email = customer.email
+    obj.phone = customer.phone
+    obj.created_at = customer.createdAt
 
-      obj.id = customer.id
-
-      obj.name = customer.name
-
-      obj.email = customer.email
-
-      obj.phone = customer.phone
-
-      obj.created_at = customer.createdAt
-
-      result[index] = obj
-    }
-  )
+    result[index] = obj
+  })
 
   return result
 }
 
 const getCustomer = customer => {
-
   if (!customer) {
     return null
   }

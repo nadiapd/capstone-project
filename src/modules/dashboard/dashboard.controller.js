@@ -1,15 +1,9 @@
-const DashboardService =
-  require('./dashboard.service')
-
-const Render =
-  require('../../helpers/render.helper')
+const DashboardService = require('./dashboard.service')
+const Render = require('../../helpers/render.helper')
 
 exports.indexPage = async (req, res) => {
-  
   try {
-
-    const analytics =
-      await DashboardService.analytics()
+    const analytics = await DashboardService.analytics()
 
     return Render.view(
       res,
@@ -21,11 +15,7 @@ exports.indexPage = async (req, res) => {
         ...analytics
       }
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/'

@@ -1,4 +1,4 @@
-exports.notFoundHandler = (req, res, next) => {
+exports.notFoundHandler = (req, res) => {
   res.status(404)
   return res.render('errors/404', {
     title: 'Halaman Tidak Ditemukan',
@@ -6,10 +6,7 @@ exports.notFoundHandler = (req, res, next) => {
   })
 }
 
-exports.errorHandler = (err, req, res, next) => {
-  // eslint-disable-next-line no-console
-  console.error(err)
-
+exports.errorHandler = (err, req, res) => {
   res.status(err.status || 500)
   return res.render('errors/500', {
     title: 'Terjadi Kesalahan',

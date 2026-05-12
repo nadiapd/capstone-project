@@ -1,11 +1,8 @@
-const Model =
-  require('../service/service.model')
-
+const Model = require('../service/service.model')
 const CustomerModel = require('../customer/customer.model')
 const HistoryModel = require('../service_history/service_history.model')
 
 exports.search = async (tracking_code, contact) => {
-
   const service = await Model.findOne({
     where: {
       tracking_code

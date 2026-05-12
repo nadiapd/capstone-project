@@ -52,7 +52,6 @@ const Service = sequelize.define('services', {
   }
 })
 
-// Define associations
 Service.associate = (models) => {
   Service.belongsTo(models.Customer, {
     foreignKey: 'customer_id',

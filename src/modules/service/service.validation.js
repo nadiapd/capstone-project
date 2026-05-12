@@ -1,7 +1,6 @@
 const Validator = require('validatorjs')
 
 exports.store = body => {
-
   const rules = {
     customer_name: 'required',
     customer_email: 'email',

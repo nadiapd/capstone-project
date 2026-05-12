@@ -4,7 +4,7 @@ const formatStatus = {
   3: 'Siap Ambil',
   4: 'Selesai',
   5: 'Batal'
-};
+}
 
 const statusColors = {
   1: 'bg-slate-100 text-slate-600',
@@ -12,7 +12,7 @@ const statusColors = {
   3: 'bg-yellow-100 text-yellow-700',
   4: 'bg-green-100 text-green-700',
   5: 'bg-red-100 text-red-700'
-};
+}
 
 const getServices = services => {
   const result = []
@@ -64,7 +64,7 @@ const getServiceDetail = service => {
     note: service.note,
     status: service.status,
     status_label: formatStatus[service.status] || 'Unknown',
-    status_color: statusColors[service.status] || 'bg-slate-100 text-slate-600', // Tambah ini juga untuk detail page
+    status_color: statusColors[service.status] || 'bg-slate-100 text-slate-600',
     created_at: service.createdAt,
     updated_at: service.updatedAt
   }

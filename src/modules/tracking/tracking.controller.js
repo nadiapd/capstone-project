@@ -1,11 +1,7 @@
-const TrackingService =
-  require('./tracking.service')
-
-const Render =
-  require('../../helpers/render.helper')
+const TrackingService = require('./tracking.service')
+const Render = require('../../helpers/render.helper')
 
 exports.indexPage = async (req, res) => {
-
   return Render.view(
     res,
     'pages/tracking/search',
@@ -17,9 +13,7 @@ exports.indexPage = async (req, res) => {
 }
 
 exports.search = async (req, res) => {
-
   try {
-
     const tracking_code = req.query.tracking_code
     const email = req.query.email
     const phone = req.query.phone
@@ -41,11 +35,10 @@ exports.search = async (req, res) => {
       )
     }
 
-    const service =
-      await TrackingService.search(
-        tracking_code,
-        { email, phone }
-      )
+    const service = await TrackingService.search(
+      tracking_code,
+      { email, phone }
+    )
 
     if (!service) {
       return Render.view(
@@ -73,11 +66,7 @@ exports.search = async (req, res) => {
         service
       }
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.view(
       res,
       'pages/tracking/search',

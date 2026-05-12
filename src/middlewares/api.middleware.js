@@ -1,16 +1,9 @@
-const Response =
-  require('../helpers/response.helper')
+const Response = require('../helpers/response.helper')
+// const Key = process.env.API_KEY
 
-const Key = process.env.API_KEY
-
-module.exports = async (
-  req,
-  res,
-  next
-) => {
-
+module.exports = async (req, res, next) => {
   try {
-next()
+    next()
     // const authorization =
     //   req.headers['authorization']
 
@@ -29,7 +22,6 @@ next()
     // )
 
   } catch (err) {
-
     return Response.error(
       res,
       500,

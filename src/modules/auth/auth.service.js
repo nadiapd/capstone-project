@@ -14,11 +14,7 @@ TokenModel.belongsTo(
 )
 
 exports.login = async payload => {
-
-  const {
-    email,
-    password
-  } = payload
+  const { email, password } = payload
 
   const admin = await AdminService.getByEmail(email)
 
@@ -51,7 +47,6 @@ exports.login = async payload => {
 }
 
 exports.verifyToken = async token => {
-
   const tokenRecord =
     await TokenModel.findOne({
       where: {
@@ -73,22 +68,15 @@ exports.verifyToken = async token => {
   }
 
   return {
-    id:
-      tokenRecord.admin.id,
-
-    name:
-      tokenRecord.admin.name,
-
-    email:
-      tokenRecord.admin.email
+    id: tokenRecord.admin.id,
+    name: tokenRecord.admin.name,
+    email: tokenRecord.admin.email
   }
 }
 
 exports.logout = async token => {
-
   await TokenModel.destroy({
     where: { token }
   })
-
   return true
 }

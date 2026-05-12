@@ -1,19 +1,10 @@
-exports.view = (
-  res,
-  page,
-  data = {}
-) => {
-
+exports.view = (res, page, data = {}) => {
   return res.render(
     page,
     data
   )
 }
 
-exports.redirect = (
-  res,
-  url
-) => {
-
+exports.redirect = (res, url) => {
   return res.redirect(url)
 }

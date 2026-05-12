@@ -28,7 +28,6 @@ const Token = sequelize.define('tokens', {
   }
 })
 
-// Define associations
 Token.associate = (models) => {
   Token.belongsTo(models.Admin, {
     foreignKey: 'admin_id',

@@ -1,7 +1,6 @@
 const Validator = require('validatorjs')
 
 exports.login = body => {
-
   const rules = {
     email: 'required|email',
     password: 'required'

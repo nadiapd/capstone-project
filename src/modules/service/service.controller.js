@@ -1,42 +1,31 @@
-const Validation =
-  require('./service.validation')
-
-const Service =
-  require('./service.service')
-
-const HistoryService =
-  require('../service_history/service_history.service')
-
-const Render =
-  require('../../helpers/render.helper')
-
-const Helper =
-  require('./service.helper')
-
-const HistoryHelper =
-  require('../service_history/service_history.helper')
+const Validation = require('./service.validation')
+const Service = require('./service.service')
+const HistoryService = require('../service_history/service_history.service')
+const Render = require('../../helpers/render.helper')
+const Helper = require('./service.helper')
+const HistoryHelper = require('../service_history/service_history.helper')
 
 exports.indexPage = async (req, res) => {
   try {
-    const filters = req.query || {};
-    const services = await Service.getAll(filters);
-    const result = services ? Helper.getServices(services) : [];
+    const filters = req.query || {}
+    
+    const services = await Service.getAll(filters)
+    
+    const result = services ? Helper.getServices(services) : []
+    
     return Render.view(res, 'pages/services/list', {
       title: 'Services',
       layout: 'main',
       services: result,
       query: filters
-    });
-  } catch (err) {
-    console.log(err);
-    return Render.redirect(res, '/dashboard');
+    })
+  } catch {
+    return Render.redirect(res, '/dashboard')
   }
-};
+}
 
 exports.createPage = async (req, res) => {
-
   try {
-
     return Render.view(
       res,
       'pages/services/create',
@@ -45,11 +34,7 @@ exports.createPage = async (req, res) => {
         layout: 'main'
       }
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch  {
     return Render.redirect(
       res,
       '/services'
@@ -58,14 +43,10 @@ exports.createPage = async (req, res) => {
 }
 
 exports.store = async (req, res) => {
-
   try {
- console.log(req.body)
-    const validation =
-      Validation.store(req.body)
+    const validation = Validation.store(req.body)
 
     if (validation.fails()) {
-
       return Render.view(
         res,
         'pages/services/create',
@@ -84,11 +65,7 @@ exports.store = async (req, res) => {
       res,
       '/services'
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/services/create'
@@ -97,11 +74,8 @@ exports.store = async (req, res) => {
 }
 
 exports.detailPage = async (req, res) => {
-
   try {
-
-    const service =
-      await Service.getById(req.params.id)
+    const service = await Service.getById(req.params.id)
 
     const result = service ? Helper.getServiceDetail(service) : null
 
@@ -114,11 +88,7 @@ exports.detailPage = async (req, res) => {
         service: result
       }
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/services'
@@ -127,9 +97,7 @@ exports.detailPage = async (req, res) => {
 }
 
 exports.updateStatus = async (req, res) => {
-
   try {
-
     await Service.updateStatus(
       req.params.id,
       req.body.status,
@@ -141,11 +109,7 @@ exports.updateStatus = async (req, res) => {
       res,
       `/services/${req.params.id}`
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/services'
@@ -154,11 +118,8 @@ exports.updateStatus = async (req, res) => {
 }
 
 exports.progressPage = async (req, res) => {
-
   try {
-
-    const service =
-      await Service.getById(req.params.id)
+    const service = await Service.getById(req.params.id)
 
     if (!service) {
       return Render.redirect(
@@ -176,11 +137,7 @@ exports.progressPage = async (req, res) => {
         service
       }
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/services'
@@ -189,11 +146,8 @@ exports.progressPage = async (req, res) => {
 }
 
 exports.historyPage = async (req, res) => {
-
   try {
-
-    const service =
-      await Service.getById(req.params.id)
+    const service = await Service.getById(req.params.id)
 
     if (!service) {
       return Render.redirect(
@@ -219,11 +173,7 @@ exports.historyPage = async (req, res) => {
         histories: result
       }
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/services'

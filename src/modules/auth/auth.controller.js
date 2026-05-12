@@ -1,10 +1,8 @@
 const Validation = require('./auth.validation')
 const Service = require('./auth.service')
-
 const Render = require('../../helpers/render.helper')
 
 exports.loginPage = async (req, res) => {
-
   return Render.view(
     res,
     'pages/auth/login',
@@ -16,14 +14,10 @@ exports.loginPage = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
-
   try {
-
-    const validation =
-      Validation.login(req.body)
+    const validation = Validation.login(req.body)
 
     if (validation.fails()) {
-
       return Render.view(
         res,
         'pages/auth/login',
@@ -36,13 +30,9 @@ exports.login = async (req, res) => {
       )
     }
 
-    const admin =
-      await Service.login(req.body)
-
-    console.log(admin)
+    const admin = await Service.login(req.body)
 
     if (!admin) {
-
       return Render.view(
         res,
         'pages/auth/login',
@@ -64,11 +54,7 @@ exports.login = async (req, res) => {
       res,
       '/dashboard'
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/auth/login'
@@ -77,9 +63,7 @@ exports.login = async (req, res) => {
 }
 
 exports.logout = async (req, res) => {
-
   try {
-
     const token = req.cookies.token
 
     if (token) {
@@ -92,11 +76,7 @@ exports.logout = async (req, res) => {
       res,
       '/auth/login'
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/auth/login'

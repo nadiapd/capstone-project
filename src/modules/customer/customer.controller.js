@@ -1,26 +1,13 @@
-const Validation =
-  require('./customer.validation')
-
-const Service =
-  require('./customer.service')
-
-const Render =
-  require('../../helpers/render.helper')
-
-const Helper =
-  require('./customer.helper')
+const Validation = require('./customer.validation')
+const Service = require('./customer.service')
+const Render = require('../../helpers/render.helper')
+const Helper = require('./customer.helper')
 
 exports.indexPage = async (req, res) => {
-
   try {
+    const customers = await Service.getAll()
 
-    const customers =
-      await Service.getAll()
-
-    const result =
-      Helper.getCustomers(
-        customers
-      )
+    const result = Helper.getCustomers(customers)
 
     return Render.view(
       res,
@@ -31,11 +18,7 @@ exports.indexPage = async (req, res) => {
         customers: result
       }
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/dashboard'
@@ -44,9 +27,7 @@ exports.indexPage = async (req, res) => {
 }
 
 exports.createPage = async (req, res) => {
-
   try {
-
     return Render.view(
       res,
       'pages/customers/create',
@@ -56,10 +37,7 @@ exports.createPage = async (req, res) => {
       }
     )
 
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/customers'
@@ -68,14 +46,10 @@ exports.createPage = async (req, res) => {
 }
 
 exports.store = async (req, res) => {
-
   try {
-
-    const validation =
-      Validation.store(req.body)
+    const validation = Validation.store(req.body)
 
     if (validation.fails()) {
-
       return Render.view(
         res,
         'pages/customers/create',
@@ -94,11 +68,7 @@ exports.store = async (req, res) => {
       res,
       '/customers'
     )
-
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.view(
       res,
       'pages/customers/create',
@@ -113,22 +83,17 @@ exports.store = async (req, res) => {
 }
 
 exports.editPage = async (req, res) => {
-
   try {
-
-    const customer =
-      await Service.getById(req.params.id)
+    const customer = await Service.getById(req.params.id)
 
     if (!customer) {
-
       return Render.redirect(
         res,
         '/customers'
       )
     }
 
-    const result =
-      Helper.getCustomer(customer)
+    const result = Helper.getCustomer(customer)
 
     return Render.view(
       res,
@@ -140,10 +105,7 @@ exports.editPage = async (req, res) => {
       }
     )
 
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/customers'
@@ -152,16 +114,11 @@ exports.editPage = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
-
   try {
-
-    const validation =
-      Validation.update(req.body)
+    const validation = Validation.update(req.body)
 
     if (validation.fails()) {
-
-      const customer =
-        await Service.getById(req.params.id)
+      const customer = await Service.getById(req.params.id)
 
       return Render.view(
         res,
@@ -182,13 +139,8 @@ exports.update = async (req, res) => {
       res,
       '/customers'
     )
-
-  } catch (err) {
-
-    console.log(err)
-
-    const customer =
-      await Service.getById(req.params.id)
+  } catch {
+    const customer = await Service.getById(req.params.id)
 
     return Render.view(
       res,
@@ -205,9 +157,7 @@ exports.update = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-
   try {
-
     await Service.delete(req.params.id)
 
     return Render.redirect(
@@ -215,10 +165,7 @@ exports.delete = async (req, res) => {
       '/customers'
     )
 
-  } catch (err) {
-
-    console.log(err)
-
+  } catch {
     return Render.redirect(
       res,
       '/customers'
