@@ -50,17 +50,7 @@ npm install
 
 ## Konfigurasi Environment
 
-Salin file `.env.example` menjadi `.env` dan sesuaikan kredensial database Anda:
-
-```env
-PORT=3000
-NODE_ENV=development
-
-DB_HOST=127.0.0.1
-DB_USER=root
-DB_PASS=password_anda
-DB_NAME=db_techservice
-```
+Salin file `.env.example` menjadi `.env` dan sesuaikan kredensial database masing-masing
 
 ## Setup Database
 
