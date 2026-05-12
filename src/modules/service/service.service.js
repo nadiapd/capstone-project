@@ -91,47 +91,56 @@ exports.getById = async id => {
 
 exports.store = async payload => {
   let customer = null
+  const { customer_id, customer_name, customer_email, customer_phone } = payload
 
-  if (payload.customer_email || payload.customer_phone) {
+  /**
+   * 1. CEK BERDASARKAN ID (Pelanggan Lama)
+   * Jika customer_id adalah angka, kita cari langsung ke database.
+   */
+  if (customer_id && !isNaN(customer_id)) {
+    customer = await CustomerModel.findByPk(customer_id)
+  }
+
+  /**
+   * 2. CEK BERDASARKAN EMAIL/PHONE (Fallback/Duplikasi)
+   * Jika pelanggan tidak ketemu lewat ID (atau input baru), 
+   * cek apakah email/phone sudah terdaftar sebelumnya agar tidak duplikat.
+   */
+  if (!customer && (customer_email || customer_phone)) {
     customer = await CustomerModel.findOne({
       where: {
         [Op.or]: [
-          payload.customer_email
-            ? { email: payload.customer_email }
-            : null,
-          payload.customer_phone
-            ? { phone: payload.customer_phone }
-            : null
-        ].filter(Boolean)
+          ...(customer_email ? [{ email: customer_email }] : []),
+          ...(customer_phone ? [{ phone: customer_phone }] : [])
+        ]
       }
     })
   }
 
-  if (!customer && payload.customer_name) {
-    customer = await CustomerModel.findOne({
-      where: {
-        name: payload.customer_name
-      }
-    })
-  }
-
+  /**
+   * 3. BUAT BARU
+   * Jika benar-benar tidak ada di database, baru kita create.
+   */
   if (!customer) {
     customer = await CustomerModel.create({
-      name: payload.customer_name,
-      email: payload.customer_email,
-      phone: payload.customer_phone
+      name: customer_name || customer_id, // Gunakan customer_id jika itu teks nama baru
+      email: customer_email,
+      phone: customer_phone
     })
   }
 
+  // 4. SET PAYLOAD FINAL
   payload.customer_id = customer.id
   payload.tracking_code = TrackingHelper.generateTrackingCode()
-  payload.status = 1
+  payload.status = 1 // Status: Baru
 
-  delete payload.customer_name
-  delete payload.customer_email
-  delete payload.customer_phone
+  // Bersihkan payload dari field yang bukan milik tabel Service
+  const cleanPayload = { ...payload }
+  delete cleanPayload.customer_name
+  delete cleanPayload.customer_email
+  delete cleanPayload.customer_phone
 
-  return await Model.create(payload)
+  return await Model.create(cleanPayload)
 }
 
 exports.updateStatus = async (

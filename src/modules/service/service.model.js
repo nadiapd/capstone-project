@@ -37,6 +37,14 @@ const Service = sequelize.define('services', {
   note: {
     type: Sequelize.TEXT
   },
+  estimated_price: {
+    type: Sequelize.DECIMAL(15, 2),
+    defaultValue: 0
+  },
+  total_price: {
+    type: Sequelize.DECIMAL(15, 2),
+    defaultValue: 0
+  },
   /**
    * Status Service:
    * 1 = Baru (Antrean masuk)
@@ -51,12 +59,5 @@ const Service = sequelize.define('services', {
     comment: '1:Baru, 2:Proses, 3:Siap Ambil, 4:Selesai, 5:Dibatalkan'
   }
 })
-
-Service.associate = (models) => {
-  Service.belongsTo(models.Customer, {
-    foreignKey: 'customer_id',
-    as: 'customer'
-  })
-}
 
 module.exports = Service

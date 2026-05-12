@@ -1,5 +1,7 @@
 const Validation = require('./service.validation')
 const Service = require('./service.service')
+const Customer = require('../customer/customer.service')
+const CustomerHelper = require('../customer/customer.helper')
 const HistoryService = require('../service_history/service_history.service')
 const Render = require('../../helpers/render.helper')
 const Helper = require('./service.helper')
@@ -11,65 +13,82 @@ exports.indexPage = async (req, res) => {
     
     const services = await Service.getAll(filters)
     
+    const customers = await Customer.getAll({ 
+      order: [['name', 'ASC']] 
+    })
+    
+    const customerResult = customers ? CustomerHelper.getCustomers(customers) : []
+    
     const result = services ? Helper.getServices(services) : []
+    
     
     return Render.view(res, 'pages/services/list', {
       title: 'Services',
       layout: 'main',
       services: result,
-      query: filters
+      query: filters,
+      customers: customerResult
     })
   } catch {
     return Render.redirect(res, '/dashboard')
   }
 }
 
-exports.createPage = async (req, res) => {
-  try {
-    return Render.view(
-      res,
-      'pages/services/create',
-      {
-        title: 'Create Service',
-        layout: 'main'
-      }
-    )
-  } catch  {
-    return Render.redirect(
-      res,
-      '/services'
-    )
-  }
-}
+// exports.createPage = async (req, res) => {
+//   try {
+//     return Render.view(
+//       res,
+//       'pages/services/create',
+//       {
+//         title: 'Create Service',
+//         layout: 'main'
+//       }
+//     )
+//   } catch  {
+//     return Render.redirect(
+//       res,
+//       '/services'
+//     )
+//   }
+// }
 
 exports.store = async (req, res) => {
   try {
     const validation = Validation.store(req.body)
 
     if (validation.fails()) {
-      return Render.view(
-        res,
-        'pages/services/create',
-        {
-          title: 'Create Service',
-          layout: 'main',
-          errors: validation.errors.all(),
-          old: req.body
-        }
-      )
+      const customers = await Customer.getAll({ 
+        order: [['name', 'ASC']] 
+      })
+    
+      const customerResult = customers ? CustomerHelper.getCustomers(customers) : []
+      
+      return Render.view(res, 'pages/services/list', {
+        title: 'Services',
+        layout: 'main',
+        errors: validation.errors.all(),
+        old: req.body,
+        customers: customerResult
+      })
     }
 
     await Service.store(req.body)
 
-    return Render.redirect(
-      res,
-      '/services'
-    )
-  } catch {
-    return Render.redirect(
-      res,
-      '/services/create'
-    )
+    return Render.redirect(res, '/services')
+  } catch (err) {
+    const customers = await Customer.getAll({ 
+      order: [['name', 'ASC']] 
+    })
+    
+    const customerResult = customers ? CustomerHelper.getCustomers(customers) : []
+
+    return Render.view(res, 'pages/services/list', {
+      title: 'Services',
+      layout: 'main',
+      errors: err,
+      old: req.body,
+      customers: customerResult
+    })
   }
 }
 

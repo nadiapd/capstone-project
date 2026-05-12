@@ -28,11 +28,4 @@ const Token = sequelize.define('tokens', {
   }
 })
 
-Token.associate = (models) => {
-  Token.belongsTo(models.Admin, {
-    foreignKey: 'admin_id',
-    as: 'admin'
-  })
-}
-
 module.exports = Token

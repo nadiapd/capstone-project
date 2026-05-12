@@ -29,11 +29,4 @@ const ServiceHistory = sequelize.define('service_histories', {
   }
 })
 
-ServiceHistory.associate = models => {
-  ServiceHistory.belongsTo(models.Service, {
-    foreignKey: 'service_id',
-    as: 'service'
-  })
-}
-
 module.exports = ServiceHistory

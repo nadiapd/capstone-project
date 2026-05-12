@@ -3,7 +3,7 @@ const router = require('express').Router()
 const Controller = require('./service.controller')
 
 router.get('/', Controller.indexPage)
-router.get('/create', Controller.createPage)
+// router.get('/create', Controller.createPage)
 router.post('/store', Controller.store)
 router.get('/:id', Controller.detailPage)
 router.get('/:id/progress', Controller.progressPage)
