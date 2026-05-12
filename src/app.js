@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 require('dotenv').config()
 
 const express = require('express')
@@ -117,26 +119,28 @@ app.use((req, res, next) => {
 })
 
 // Error Handler
-app.use((err, req, res) => {
-
-  if (err.status === 404) {
-
-    return res.status(404).render(
-      'errors/404',
-      {
-        title: 'Page Not Found',
-        layout: 'public'
-      }
-    )
+app.use((err, req, res, next) => {
+  if (err.status !== 404) {
+    console.error('❌ SYSTEM ERROR:', err.message)
+    if (process.env.NODE_ENV === 'development') {
+      console.error(err.stack)
+    }
   }
 
-  return res.status(500).render(
-    'errors/500',
-    {
-      title: 'Internal Server Error',
+  res.status(err.status || 500)
+
+  if (err.status === 404) {
+    return res.render('errors/404', {
+      title: 'Page Not Found',
       layout: 'public'
-    }
-  )
+    })
+  }
+
+  return res.render('errors/500', {
+    title: 'Internal Server Error',
+    layout: 'public',
+    error: process.env.NODE_ENV === 'development' ? err : {}
+  })
 })
 
 module.exports = app
