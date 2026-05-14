@@ -1,11 +1,14 @@
 const Validation = require('./customer.validation')
-const Service = require('./customer.service')
+const Customer = require('./customer.service')
 const Render = require('../../helpers/render.helper')
 const Helper = require('./customer.helper')
+const SessionHelper = require('../../helpers/session.helper')
 
 exports.indexPage = async (req, res) => {
   try {
-    const customers = await Service.getAll()
+    const filters = req.query || {}
+
+    const customers = await Customer.getAll(filters)
 
     const result = Helper.getCustomers(customers)
 
@@ -15,10 +18,18 @@ exports.indexPage = async (req, res) => {
       {
         title: 'Customers',
         layout: 'main',
-        customers: result
+        customers: result,
+        query: filters,
+        errors: SessionHelper.getFlash(req, 'errors'),
+        old: SessionHelper.getFlash(req, 'old'),
+        success: SessionHelper.getFlash(req, 'success')
       }
     )
-  } catch {
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
     return Render.redirect(
       res,
       '/dashboard'
@@ -26,149 +37,78 @@ exports.indexPage = async (req, res) => {
   }
 }
 
-exports.createPage = async (req, res) => {
-  try {
-    return Render.view(
-      res,
-      'pages/customers/create',
-      {
-        title: 'Create Customer',
-        layout: 'main'
-      }
-    )
-
-  } catch {
-    return Render.redirect(
-      res,
-      '/customers'
-    )
-  }
-}
-
 exports.store = async (req, res) => {
+  SessionHelper.clearFlash(req, 'success')
+  SessionHelper.clearFlash(req, 'errors')
+  SessionHelper.clearFlash(req, 'old')
   try {
     const validation = Validation.store(req.body)
 
     if (validation.fails()) {
-      return Render.view(
-        res,
-        'pages/customers/create',
-        {
-          title: 'Create Customer',
-          layout: 'main',
-          errors: validation.errors.all(),
-          old: req.body
-        }
-      )
+      SessionHelper.setFlash(req, 'errors', validation.errors.all())
+      SessionHelper.setFlash(req, 'old', req.body)
+      return Render.redirect(res, '/customers')
     }
 
-    await Service.store(req.body)
-
+    await Customer.store(req.body)
+    
+    SessionHelper.setFlash(req, 'success', `Sukses menambah data ${req.body.name}.`)
     return Render.redirect(
       res,
       '/customers'
     )
-  } catch {
-    return Render.view(
-      res,
-      'pages/customers/create',
-      {
-        title: 'Create Customer',
-        layout: 'main',
-        errors: validation.errors.all(),
-        old: req.body
-      }
-    )
-  }
-}
-
-exports.editPage = async (req, res) => {
-  try {
-    const customer = await Service.getById(req.params.id)
-
-    if (!customer) {
-      return Render.redirect(
-        res,
-        '/customers'
-      )
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
     }
-
-    const result = Helper.getCustomer(customer)
-
-    return Render.view(
-      res,
-      'pages/customers/edit',
-      {
-        title: 'Edit Customer',
-        layout: 'main',
-        customer: result
-      }
-    )
-
-  } catch {
-    return Render.redirect(
-      res,
-      '/customers'
-    )
+    SessionHelper.setFlash(req, 'errors', systemError)
+    return Render.redirect(res, '/customers')
   }
 }
 
 exports.update = async (req, res) => {
+  SessionHelper.clearFlash(req, 'success')
+  SessionHelper.clearFlash(req, 'errors')
+  SessionHelper.clearFlash(req, 'old')
+
   try {
     const validation = Validation.update(req.body)
 
     if (validation.fails()) {
-      const customer = await Service.getById(req.params.id)
-
-      return Render.view(
-        res,
-        'pages/customers/edit',
-        {
-          title: 'Edit Customer',
-          layout: 'main',
-          errors: validation.errors.all(),
-          old: req.body,
-          customer
-        }
-      )
+      SessionHelper.setFlash(req, 'errors', validation.errors.all())
+      SessionHelper.setFlash(req, 'old', req.body)
+      return Render.redirect(res, '/customers')
     }
 
-    await Service.update(req.params.id, req.body)
+    await Customer.update(req.params.id, req.body)
 
+    SessionHelper.setFlash(req, 'success', `Sukses mengedit data ${req.body.name}.`)
     return Render.redirect(
       res,
       '/customers'
     )
-  } catch {
-    const customer = await Service.getById(req.params.id)
-
-    return Render.view(
-      res,
-      'pages/customers/edit',
-      {
-        title: 'Edit Customer',
-        layout: 'main',
-        errors: validation.errors.all(),
-        old: req.body,
-        customer
-      }
-    )
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
+    return Render.redirect(res, '/customers')
   }
 }
 
-exports.delete = async (req, res) => {
-  try {
-    await Service.delete(req.params.id)
+// exports.delete = async (req, res) => {
+//   try {
+//     await Service.delete(req.params.id)
 
-    return Render.redirect(
-      res,
-      '/customers'
-    )
+//     return Render.redirect(
+//       res,
+//       '/customers'
+//     )
 
-  } catch {
-    return Render.redirect(
-      res,
-      '/customers'
-    )
-  }
-}
+//   } catch {
+//     return Render.redirect(
+//       res,
+//       '/customers'
+//     )
+//   }
+// }

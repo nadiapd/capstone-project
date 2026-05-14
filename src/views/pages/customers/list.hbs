@@ -1,73 +1,205 @@
-<div class="bg-white rounded-2xl shadow p-8">
-
+<div class="max-w-6xl mx-auto">
   <div class="flex justify-between items-center mb-8">
-    <h2 class="text-2xl font-bold">
-      Customers
-    </h2>
-
-    <a
-      href="/customers/create"
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    >
-      Add Customer
-    </a>
+    <div>
+      <h2 class="text-2xl font-bold text-slate-900">Daftar Pelanggan</h2>
+      <p class="text-xs text-slate-400 font-medium">Kelola informasi kontak pelanggan.</p>
+    </div>
+    <button onclick="openCustomerModal('add')"
+      class="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all">
+      + Tambah Baru
+    </button>
   </div>
-
-  <div class="overflow-x-auto">
-    <table class="min-w-full bg-white">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Name
-          </th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Email
-          </th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Phone
-          </th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Actions
-          </th>
-        </tr>
-      </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-        {{#each customers}}
-        <tr>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-            {{this.name}}
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            {{this.email}}
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            {{this.phone}}
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-            <a
-              href="/customers/{{this.id}}/edit"
-              class="text-indigo-600 hover:text-indigo-900 mr-4"
-            >
-              Edit
-            </a>
-            <form
-              action="/customers/{{this.id}}/delete"
-              method="POST"
-              class="inline"
-              onsubmit="return confirm('Are you sure you want to delete this customer?')"
-            >
-              <button
-                type="submit"
-                class="text-red-600 hover:text-red-900"
-              >
-                Delete
-              </button>
-            </form>
-          </td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
+  <div class="bg-white rounded-xl drop-shadow-md shadow-slate-200/50 border border-slate-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50/50 border-b border-slate-100">
+            <th class="px-8 py-5">
+              <a href="/customers?{{#if query.q}}q={{query.q}}&{{/if}}sortBy=name&sortOrder={{#if (eq query.sortOrder 'ASC')}}DESC{{else}}ASC{{/if}}"
+                class="flex items-center text-xs uppercase tracking-widest hover:text-blue-600 whitespace-nowrap 
+                {{#if (eq query.sortBy 'name')}}text-slate-900 font-black{{else}}text-slate-400 font-bold{{/if}}">
+                Nama Pelanggan {{#if (eq query.sortBy 'name')}}{{#if (eq query.sortOrder
+                'ASC')}}↑{{else}}↓{{/if}}{{else}}↑↓{{/if}}
+              </a>
+            </th>
+            <th class="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">
+              Kontak
+            </th>
+            <th class="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">
+              Status Akun
+            </th>
+            <th
+              class="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest text-right whitespace-nowrap">
+              Aksi
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          {{#each customers}}
+          <tr class="hover:bg-slate-50/50 transition-colors group">
+            <td class="px-8 py-5 whitespace-nowrap">
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-bold text-slate-900">{{this.name}}</span>
+              </div>
+            </td>
+            <td class="px-8 py-5 whitespace-nowrap">
+              <div class="flex flex-col">
+                <span class="text-sm text-slate-700 font-medium">{{this.email}}</span>
+                <span class="text-[11px] text-slate-400 font-bold tracking-wider">{{this.phone}}</span>
+              </div>
+            </td>
+            <td class="px-8 py-5 whitespace-nowrap">
+              <span
+                class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase rounded-lg border border-emerald-100">Aktif</span>
+            </td>
+            <td class="px-8 py-5 whitespace-nowrap text-right text-sm">
+              <div class="flex justify-end gap-2">
+                <button
+                  onclick="openCustomerModal('edit', {id: '{{this.id}}', name: '{{this.name}}', email: '{{this.email}}', phone: '{{this.phone}}'})"
+                  class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                  title="Edit Pelanggan">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                    </path>
+                  </svg>
+                </button>
+                {{!-- <form action="/customers/{{this.id}}/delete" method="POST" class="inline"
+                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus pelanggan ini?')">
+                  <button type="submit"
+                    class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                    title="Hapus">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                      </path>
+                    </svg>
+                  </button>
+                </form> --}}
+              </div>
+            </td>
+          </tr>
+          {{else}}
+          <tr>
+            <td colspan="4" class="px-8 py-16 text-center">
+              <div class="flex flex-col items-center">
+                <span class="text-4xl mb-4">📂</span>
+                <p class="text-slate-400 italic text-sm">Belum ada data pelanggan ditemukan.</p>
+              </div>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
   </div>
-
 </div>
+
+{{!-- MODAL ADD/EDIT CUSTOMER --}}
+<div id="customerModal" class="fixed inset-0 z-[100] hidden">
+  <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div
+      class="relative bg-white w-full max-w-xl rounded-xl shadow-2xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300"
+      id="customerModalContainer">
+      <div class="p-8 pb-4 flex justify-between items-center">
+        <h3 id="modalTitle" class="text-xl font-black text-slate-900 uppercase tracking-tight">Tambah Pelanggan</h3>
+        <button onclick="closeCustomerModal()"
+          class="text-slate-400 hover:text-red-500 text-2xl transition-colors">&times;</button>
+      </div>
+      <div id="modal-error-space" class="px-8 hidden">
+        <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-r-xl">
+          <p class="text-[10px] font-black text-red-800 uppercase mb-1">Terjadi Kesalahan:</p>
+          <ul id="modal-error-list" class="list-disc list-inside text-[11px] text-red-600 font-bold leading-relaxed">
+          </ul>
+        </div>
+      </div>
+      <form id="customerForm" action="/customers/store" method="POST" class="p-8 pt-4">
+        <div class="space-y-5">
+          <div>
+            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Nama Lengkap
+              <span class="text-red-500">*</span></label>
+            <input type="text" name="name" id="cust_name" rules="required|min:3" fieldname="Nama Pelanggan"
+              placeholder="Nadia Putri"
+              class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
+          </div>
+          <div>
+            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Email Aktif
+              <span class="text-red-500">*</span></label>
+            <input type="email" name="email" id="cust_email" rules="required|email" fieldname="Email"
+              placeholder="nadia@example.com"
+              class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
+          </div>
+          <div>
+            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Nomor
+              WhatsApp <span class="text-red-500">*</span></label>
+            <input type="text" name="phone" id="cust_phone" rules="required|min:10|numeric" fieldname="Nomor WhatsApp"
+              placeholder="081234567890"
+              class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
+          </div>
+        </div>
+        <div class="mt-8 flex gap-3">
+          <button type="button" onclick="closeCustomerModal()"
+            class="flex-1 px-6 py-3 bg-slate-100 text-slate-500 rounded-xl font-bold text-sm hover:bg-slate-200 transition-all">
+            Batal
+          </button>
+          <button type="submit" id="btnSubmit"
+            class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all">
+            Simpan Data
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('customerModal');
+  const container = document.getElementById('customerModalContainer');
+  const form = document.getElementById('customerForm');
+  const modalTitle = document.getElementById('modalTitle');
+  const btnSubmit = document.getElementById('btnSubmit');
+  const errorSpace = document.getElementById('modal-error-space');
+  const errorList = document.getElementById('modal-error-list');
+
+  function openCustomerModal(mode = 'add', data = null) {
+    errorSpace.classList.add('hidden');
+    modal.classList.remove('hidden');
+
+    if (mode === 'edit' && data) {
+      modalTitle.innerText = 'Update Data Pelanggan';
+      btnSubmit.innerText = 'Simpan Perubahan';
+      form.action = `/customers/${data.id}/update`;
+
+      document.getElementById('cust_name').value = data.name;
+      document.getElementById('cust_email').value = data.email;
+      document.getElementById('cust_phone').value = data.phone;
+    } else {
+      modalTitle.innerText = 'Tambah Pelanggan Baru';
+      btnSubmit.innerText = 'Daftarkan Pelanggan';
+      form.action = '/customers/store';
+      form.reset();
+    }
+
+    setTimeout(() => {
+      container.classList.remove('scale-95', 'opacity-0');
+      container.classList.add('scale-100', 'opacity-100');
+    }, 10);
+  }
+
+  function closeCustomerModal() {
+    container.classList.remove('scale-100', 'opacity-100');
+    container.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 300);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initLiveValidation('#customerForm');
+  });
+
+  window.onclick = function (event) {
+    if (event.target == modal) closeCustomerModal();
+  }
+</script>

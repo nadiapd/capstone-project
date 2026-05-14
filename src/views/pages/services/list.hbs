@@ -1,6 +1,9 @@
 <div class="max-w-6xl mx-auto">
   <div class="flex justify-between items-center mb-8">
-    <h2 class="text-2xl font-bold text-slate-900">Daftar Servis</h2>
+    <div>
+        <h2 class="text-2xl font-bold text-slate-900">Daftar Servis</h2>
+        <p class="text-xs text-slate-400 font-medium">Kelola informasi servis.</p>
+      </div>
     <button onclick="openCreateModal()"
       class="bg-blue-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all">
       + Tambah Baru
@@ -13,7 +16,7 @@
       <div class="md:col-span-1">
         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Cari</label>
         <input type="text" name="q" value="{{query.q}}" placeholder="Kode/Nama/Brand..."
-          class="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
+          class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
       </div>
 
       <div>
@@ -21,7 +24,7 @@
           Kategori
         </label>
         <select name="category"
-          class="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:bg-white outline-none">
+          class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:bg-white outline-none">
           <option value="">Semua Kategori</option>
           <option value="laptop" {{#if (eq query.category 'laptop' )}}selected{{/if}}>
             Laptop
@@ -37,7 +40,7 @@
       <div>
         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Status</label>
         <select name="status"
-          class="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:bg-white outline-none">
+          class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:bg-white outline-none">
           <option value="">Semua Status</option>
           <option value="1" {{#if (eq query.status '1' )}}selected{{/if}}>Baru</option>
           <option value="2" {{#if (eq query.status '2' )}}selected{{/if}}>Proses</option>
@@ -200,7 +203,7 @@
                   Pelanggan</label>
                 <input type="email" id="customer_email" name="customer_email" rules="required|email" fieldname="Email"
                   placeholder="contoh@mail.com"
-                  class="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
+                  class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
               </div>
 
               <div class="col-span-2">
@@ -208,7 +211,7 @@
                   WhatsApp</label>
                 <input type="text" id="customer_phone" name="customer_phone" rules="required|phone" fieldname="Nomor WA"
                   placeholder="0812..."
-                  class="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
+                  class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
               </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -220,13 +223,13 @@
                   Tipe</label>
                 <input type="text" name="device_name" rules="required" fieldname="Nama Perangkat"
                   placeholder="Contoh: Asus ROG Strix"
-                  class="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
+                  class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
               </div>
               <div>
                 <label
                   class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Kategori</label>
                 <select name="device_category"
-                  class="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm outline-none">
+                  class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm outline-none">
                   <option value="laptop">Laptop</option>
                   <option value="smartphone">Smartphone</option>
                   <option value="printer">Printer</option>
@@ -238,7 +241,7 @@
                   Kerusakan</label>
                 <textarea name="note" rules="required|min:10" fieldname="Deskripsi" rows="3"
                   placeholder="Jelaskan detail kerusakan unit di sini..."
-                  class="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all resize-none"></textarea>
+                  class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all resize-none"></textarea>
               </div>
               <div class="md:col-span-2">
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Estimasi
@@ -249,7 +252,7 @@
                   <div class="w-full">
                     <input type="number" name="estimated_price" rules="required" fieldname="Estimasi Biaya"
                       placeholder="0"
-                      class="w-full pl-10 bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
+                      class="w-full pl-10 bg-white border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
                   </div>
                 </div>
               </div>
@@ -393,7 +396,7 @@
   }
 
   .ts-control {
-    background-color: #f8fafc !important;
+    background-color: white !important;
     /* bg-slate-50 */
     border: 1px solid #f1f5f9 !important;
     /* border-slate-100 */

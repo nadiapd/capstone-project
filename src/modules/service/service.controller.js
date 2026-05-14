@@ -23,56 +23,48 @@ exports.indexPage = async (req, res) => {
     
     const result = services ? Helper.getServices(services) : []
     
-    
     return Render.view(res, 'pages/services/list', {
       title: 'Services',
       layout: 'main',
       services: result,
       query: filters,
-      customers: customerResult
+      customers: customerResult,
+      errors: SessionHelper.getFlash(req, 'errors'),
+      old: SessionHelper.getFlash(req, 'old'),
+      success: SessionHelper.getFlash(req, 'success')
     })
-  } catch {
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
     return Render.redirect(res, '/dashboard')
   }
 }
 
 exports.store = async (req, res) => {
+  SessionHelper.clearFlash(req, 'success')
+  SessionHelper.clearFlash(req, 'errors')
+  SessionHelper.clearFlash(req, 'old')
   try {
     const validation = Validation.store(req.body)
 
     if (validation.fails()) {
-      const customers = await Customer.getAll({ 
-        order: [['name', 'ASC']] 
-      })
-    
-      const customerResult = customers ? CustomerHelper.getCustomers(customers) : []
-      
-      return Render.view(res, 'pages/services/list', {
-        title: 'Services',
-        layout: 'main',
-        errors: validation.errors.all(),
-        old: req.body,
-        customers: customerResult
-      })
+      SessionHelper.setFlash(req, 'errors', validation.errors.all())
+      SessionHelper.setFlash(req, 'old', req.body)
+      return Render.redirect(res, '/services')
     }
 
     await Service.store(req.body)
 
+    SessionHelper.setFlash(req, 'success', 'Sukses menambah data servis baru.')
     return Render.redirect(res, '/services')
   } catch (err) {
-    const customers = await Customer.getAll({ 
-      order: [['name', 'ASC']] 
-    })
-    
-    const customerResult = customers ? CustomerHelper.getCustomers(customers) : []
-
-    return Render.view(res, 'pages/services/list', {
-      title: 'Services',
-      layout: 'main',
-      errors: err,
-      old: req.body,
-      customers: customerResult
-    })
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
+    return Render.redirect(res, '/services')
   }
 }
 
@@ -93,7 +85,11 @@ exports.detailPage = async (req, res) => {
         old: SessionHelper.getFlash(req, 'old')
       }
     )
-  } catch {
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
     return Render.redirect(
       res,
       '/services'
@@ -102,13 +98,16 @@ exports.detailPage = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
+  SessionHelper.clearFlash(req, 'success')
+  SessionHelper.clearFlash(req, 'errors')
+  SessionHelper.clearFlash(req, 'old')
   try {
     const validation = Validation.update(req.body)
 
     if (validation.fails()) {
       SessionHelper.setFlash(req, 'errors', validation.errors.all())
       SessionHelper.setFlash(req, 'old', req.body)
-  
+
       return Render.redirect(res, `/services/${req.params.id}`)
     }
     const service = await Service.getById(req.params.id)
@@ -127,6 +126,8 @@ exports.update = async (req, res) => {
       req.admin?.name || 'System',
       cleanTotalPrice
     )
+    
+    SessionHelper.setFlash(req, 'success', 'Sukses menambah progress.')
 
     if (req.body.status === '3' || req.body.status === 3) {
       MailHelper.sendReadyNotification(serviceData.customer_email, {
@@ -158,7 +159,11 @@ exports.update = async (req, res) => {
       res,
       `/services/${req.params.id}`
     )
-  } catch {
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
     return Render.redirect(
       res,
       '/services'
@@ -186,7 +191,11 @@ exports.progressPage = async (req, res) => {
         service
       }
     )
-  } catch {
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
     return Render.redirect(
       res,
       '/services'
@@ -224,7 +233,11 @@ exports.historyPage = async (req, res) => {
         histories: resultHistory
       }
     )
-  } catch {
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
     return Render.redirect(
       res,
       '/services'

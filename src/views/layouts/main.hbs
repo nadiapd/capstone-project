@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,27 +9,48 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #f8fafc;
     }
+
     .nav-item {
       color: #94a3b8;
       transition: all 0.3s;
     }
+
     .nav-item:hover {
       color: #ffffff;
       background-color: #1e293b;
     }
+
     .nav-active {
       color: #ffffff;
       background-color: #1D4ed8;
       box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
     }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translate(0, 0);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(0, 0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeInDown 0.4s ease-out forwards;
+    }
   </style>
   <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 </head>
+
 <body class="flex min-h-screen">
   <aside class="w-64 bg-slate-900 text-white flex flex-col sticky top-0 h-screen shadow-xl">
     <div class="py-8 px-4">
@@ -98,30 +120,110 @@
       </a>
     </div>
   </aside>
-  <main class="flex-1 p-10 overflow-y-auto">
+  {{!-- Tambahkan class relative ke main --}}
+  <main class="flex-1 p-10 overflow-y-auto relative">
+    <div id="global-alerts" class="absolute top-8 right-10 z-[999] min-w-[300px] px-4">
+      {{#if errors}}
+      <div id="errors-container"
+        class="mb-4 flex items-start p-4 bg-red-600 rounded-xl border border-red-500 shadow-2xl shadow-red-500/40 animate-fade-in">
+        <div class="flex-shrink-0 bg-red-700/50 rounded-lg p-1.5 mr-3 mt-0.5">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+            </path>
+          </svg>
+        </div>
+        <div class="flex-1">
+          <p class="text-sm font-black text-white uppercase tracking-tight mb-1">Terjadi Kesalahan</p>
+          <ul class="list-disc list-inside">
+            {{#each errors}}
+              {{#each this}}
+              <li class="text-[11px] text-red-100 font-bold leading-relaxed">{{this}}</li>
+              {{/each}}
+            {{/each}}
+          </ul>
+        </div>
+        <button type="button" onclick="closeAlert('errors-container')"
+          class="ml-auto text-red-200 hover:text-white transition-colors p-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M6 18L18 6M6 6l12 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+      </div>
+      {{/if}}
+      {{#if success}}
+      <div id="success-container"
+        class="mb-4 flex items-center p-4 bg-emerald-600 rounded-xl border border-emerald-500 shadow-2xl shadow-emerald-500/40 animate-fade-in">
+        <div class="flex-shrink-0 bg-emerald-700/50 rounded-lg p-1.5 mr-3">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <div class="flex-1">
+          <p class="text-sm font-black text-white uppercase tracking-tight">Berhasil</p>
+          <p class="text-[11px] text-emerald-50 font-bold leading-relaxed">{{success}}</p>
+        </div>
+        <button type="button" onclick="closeAlert('success-container')"
+          class="ml-auto text-emerald-200 hover:text-white transition-colors p-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M6 18L18 6M6 6l12 12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+      </div>
+      {{/if}}
+    </div>
     {{{body}}}
   </main>
   <script src="/js/validator.js"></script>
 </body>
 <script>
+  function closeAlert(id) {
+    const alertBox = document.getElementById(id);
+    if (alertBox) {
+      alertBox.classList.add('opacity-0', 'scale-95', 'transition-all', 'duration-500');
+      setTimeout(() => {
+        alertBox.remove();
+      }, 500);
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    const successBox = document.getElementById('success-container');
+    const errorBox = document.getElementById('errors-container');
+    if (successBox) {
+      setTimeout(() => {
+        closeAlert('success-container');
+      }, 5000);
+    }
+    if (errorBox) {
+      setTimeout(() => {
+        closeAlert('errors-container');
+      }, 5000);
+    }
+    if (window.history.replaceState) {
+      const url = new URL(window.location.href);
+      if (url.searchParams.has('status') || url.searchParams.has('message')) {
+        url.searchParams.delete('status');
+        url.searchParams.delete('message');
+        window.history.replaceState({ path: url.href }, '', url.href);
+      }
+    }
+
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('#sidebar-nav a');
 
     navLinks.forEach(link => {
-      // Hapus class active yang mungkin tertinggal secara hardcoded
       link.classList.remove('nav-active');
-      
-      // Jika path URL saat ini sama dengan href menu, tambahkan class nav-active
+
       if (currentPath === link.getAttribute('href')) {
         link.classList.add('nav-active');
       }
-      
-      // Logika tambahan: Jika sedang di halaman detail/create service, menu Antrean tetap aktif
+
       if (currentPath.startsWith('/services') && link.getAttribute('href') === '/services') {
         link.classList.add('nav-active');
       }
     });
   });
 </script>
+
 </html>

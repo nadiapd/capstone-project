@@ -15,37 +15,6 @@
       </span>
     </div>
   </div>
-  {{!-- Letakkan di dalam <form id="update-service-form"> --}}
-    {{#if errors}}
-    <div id="errors-container" class="mb-6 flex items-start p-4 bg-red-50 rounded-xl drop-shadow animate-fade-in">
-      {{!-- Icon --}}
-      <div class="flex-shrink-0 bg-red-100 rounded-lg p-1.5 mr-3 mt-0.5">
-        <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-          </path>
-        </svg>
-      </div>
-
-      {{!-- Error Messages --}}
-      <div class="flex-1">
-        <p class="text-sm font-black text-red-800 uppercase tracking-tight mb-1">Terjadi Kesalahan</p>
-        <ul class="list-disc list-inside">
-          {{#each errors}}
-          <li class="text-[11px] text-red-700 font-bold leading-relaxed">{{this}}</li>
-          {{/each}}
-        </ul>
-      </div>
-
-      {{!-- Close Button --}}
-      <button type="button" onclick="closeErrorManual()"
-        class="ml-auto text-red-400 hover:text-red-600 transition-colors p-1">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-    </div>
-    {{/if}}
     {{!-- Main Info Card --}}
     <div class="bg-white rounded-xl border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden mb-8">
       <div class="p-8 md:p-10">
@@ -199,7 +168,7 @@
                   Status
                   Terbaru <span class="text-red-600">*</span></label>
                 <select id="status-select" name="status" rules="required" fieldname="Status" required
-                  class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
+                  class="w-full bg-white border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
                   <option value="1" {{#if (eq service.status 1)}}{{/if}} disabled>Baru (Unit Masuk)</option>
                   <option value="2" {{#if (eq service.status 2)}}selected{{/if}}>Proses Perbaikan</option>
                   <option value="3" {{#if (eq service.status 3)}}selected{{/if}}>Siap Ambil (Selesai)</option>
@@ -214,7 +183,7 @@
                   Pengerjaan<span class="text-red-600">*</span></label>
                 <textarea rules="required|min:5" fieldname="Catatan Pengerjaan" name="note" rows="3"
                   placeholder="Contoh: Penggantian LCD selesai, sedang tahap testing..."
-                  class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all resize-none"></textarea>
+                  class="w-full bg-white border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all resize-none"></textarea>
               </div>
               {{!-- Input Total Biaya (Muncul jika Siap Ambil) --}}
               <div id="total-cost-container" class="hidden animate-fade-in">
@@ -226,7 +195,7 @@
                   <div class="w-full">
                     <input type="number" name="total_price" rules="required" fieldname="Total Biaya Akhir"
                       placeholder="0"
-                      class="w-full pl-10 bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
+                      class="w-full pl-10 bg-white border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
                   </div>
                 </div>
               </div>
