@@ -1,103 +1,101 @@
-{{!-- <div class="mx-auto max-w-3xl space-y-6">
-  <div class="rounded-3xl bg-white p-8 shadow-sm">
-    <h1 class="text-3xl font-semibold">Hasil Tracking</h1>
-    <p class="mt-2 text-slate-600">Detail status service untuk kode <strong>{{service.tracking_code}}</strong>.</p>
-
-    <div class="mt-6 grid gap-6 md:grid-cols-2">
-      <div class="rounded-2xl bg-slate-50 p-5">
-        <p class="text-slate-500">Nama Customer</p>
-        <p class="mt-2 text-lg font-medium">{{service.customer.name}}</p>
-        <p class="text-slate-600">{{service.customer.email}}</p>
-        <p class="text-slate-600">{{service.customer.phone}}</p>
-      </div>
-      <div class="rounded-2xl bg-slate-50 p-5">
-        <p class="text-slate-500">Status Service</p>
-        <p class="mt-2 text-lg font-medium capitalize">{{service.status}}</p>
-        <p class="text-slate-600">Masuk: {{formatDate service.entry_date}}</p>
-        <p class="text-slate-600">Selesai: {{formatDate service.finished_date}}</p>
-      </div>
+<div class="max-w-2xl mx-auto px-4 sm:px-6 animate-fade-in">
+  <div class="bg-white rounded-xl shadow-2xl shadow-slate-200/60 border border-slate-50 overflow-hidden">
+    <div class="p-8 {{service.status_color}} text-center relative border-b border-black/5">
+  <div class="absolute inset-0 bg-white/20"></div>
+  <div class="relative z-10">
+    <div class="flex items-center justify-center gap-2 mb-2">
+      <p class="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">
+        Servis #<span id="trackingCode">{{service.tracking_code}}</span>
+      </p>
+      <button onclick="copyTrackingID()" 
+        class="p-1 hover:bg-black/5 rounded transition-colors active:scale-90" 
+        title="Salin ID">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+      </button>
     </div>
-
-    <div class="rounded-2xl bg-slate-50 p-5">
-      <h2 class="font-semibold">Detail Perangkat</h2>
-      <p class="mt-3 text-slate-700">{{service.device_name}} / {{service.device_brand}}</p>
-      <p class="mt-2 text-slate-600">Kategori: {{service.category.category_name}}</p>
-      <p class="mt-3 text-slate-600">Keluhan: {{service.note}}</p>
-    </div>
+    <h3 class="text-3xl font-extrabold uppercase tracking-tight">
+      {{service.status_label}}
+    </h3>
   </div>
-
-  <div class="rounded-3xl bg-white p-8 shadow-sm">
-    <h2 class="text-2xl font-semibold">Histori Progress</h2>
-    <div class="mt-4 space-y-4">
-      {{#each service.service_logs}}
-        <div class="rounded-2xl bg-slate-50 p-5">
-          <div class="flex items-center justify-between gap-4">
-            <span class="font-semibold capitalize">{{status}}</span>
-            <span class="text-sm text-slate-500">{{formatDate created_at}}</span>
-          </div>
-          <p class="mt-3 text-slate-600">{{note}}</p>
+</div>
+    <div class="p-6 md:p-10">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+        <div class="flex flex-col gap-1 p-4 bg-slate-50 rounded-xl border border-slate-100">
+          <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Pemilik</span>
+          <p class="text-slate-900 font-extrabold text-base">{{service.customer_name}}</p>
         </div>
-      {{else}}
-        <p class="text-slate-600">Belum ada histori update.</p>
-      {{/each}}
-    </div>
-  </div>
-</div> --}}
-
-<div class="max-w-3xl mx-auto bg-white rounded-2xl shadow p-8">
-
-  <h1 class="text-3xl font-bold mb-6">
-    Service Detail
-  </h1>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="rounded-2xl bg-slate-50 p-6">
-      <p class="text-slate-500 text-sm">Tracking Code</p>
-      <p class="mt-2 font-semibold">{{service.tracking_code}}</p>
-    </div>
-    <div class="rounded-2xl bg-slate-50 p-6">
-      <p class="text-slate-500 text-sm">Current Status</p>
-      <p class="mt-2 font-semibold capitalize">{{service.status}}</p>
-    </div>
-    <div class="rounded-2xl bg-slate-50 p-6">
-      <p class="text-slate-500 text-sm">Customer</p>
-      <p class="mt-2 font-semibold">{{service.customer.name}}</p>
-      <p class="text-slate-600 text-sm">{{service.customer.email}}</p>
-      <p class="text-slate-600 text-sm">{{service.customer.phone}}</p>
-    </div>
-  </div>
-
-  <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="rounded-2xl bg-slate-50 p-6">
-      <p class="text-slate-500 text-sm">Device</p>
-      <p class="mt-2 font-semibold">{{service.device_name}}</p>
-      <p class="text-slate-600">{{service.device_brand}}</p>
-      <p class="text-slate-600">Kategori: {{#if service.device_category_other}}{{service.device_category_other}}{{else}}{{service.device_category}}{{/if}}</p>
-    </div>
-    <div class="rounded-2xl bg-slate-50 p-6">
-      <p class="text-slate-500 text-sm">note</p>
-      <p class="mt-2 text-slate-600">{{service.note}}</p>
-    </div>
-  </div>
-
-  <div class="mt-8 rounded-2xl bg-slate-50 p-6">
-    <h2 class="text-xl font-semibold">Timeline Progress</h2>
-    <div class="mt-4 space-y-4">
-      {{#each service.histories}}
-        <div class="rounded-2xl bg-white p-4 shadow-sm">
-          <div class="flex items-center justify-between gap-4">
-            <span class="font-semibold capitalize">{{status}}</span>
-            <span class="text-sm text-slate-500">{{formatDate createdAt}}</span>
+        <div class="flex flex-col gap-1 p-4 bg-slate-50 rounded-xl border border-slate-100 sm:text-right">
+          <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Unit / Perangkat</span>
+          <p class="text-slate-900 font-extrabold text-base">{{service.device_name}}</p>
+        </div>
+      </div>
+      {{#if service.total_price}}
+      <div class="mb-10 p-6 bg-slate-900 rounded-2xl shadow-xl shadow-blue-900/10 text-white relative overflow-hidden animate-fade-in">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-600/20 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
+          <div>
+            <p class="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-1">Total Biaya Akhir</p>
+            <p class="text-3xl font-black tracking-tight">{{formatCurrency service.total_price}}</p>
           </div>
-          <p class="mt-3 text-slate-600">{{note}}</p>
-          {{#if updated_by}}
-            <p class="mt-2 text-xs text-slate-400">Updated by: {{updated_by}}</p>
+          {{#if (eq service.status 3)}}
+          <div class="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+             <span class="text-emerald-400 text-sm">✓</span>
+             <p class="text-[10px] text-emerald-100 font-black uppercase tracking-wider">Siap Diambil</p>
+          </div>
           {{/if}}
         </div>
-      {{else}}
-        <p class="text-slate-600">Belum ada progress update.</p>
-      {{/each}}
+      </div>
+      {{/if}}
+      <div class="space-y-8 relative">
+        <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 mb-8 ml-1">
+          <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span> Riwayat Pengerjaan
+        </h4>
+        <div class="relative pl-8 space-y-10 before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[1.5px] before:bg-slate-100">
+          {{#each history}}
+          <div class="relative group">
+            <div class="absolute -left-8 top-1 w-6 h-6 bg-white border-[3px] border-blue-600 rounded-full z-10"></div>
+            <div class="flex flex-col gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                 <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase shadow-sm {{this.status_color}}">
+                   {{this.status_label}}
+                 </span>
+                 <span class="text-[10px] font-bold text-slate-400">
+                   {{formatDate this.created_at}}
+                 </span>
+              </div>
+              <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 shadow-sm transition-colors group-hover:bg-blue-50/30">
+                <p class="text-[13px] text-slate-700 font-medium leading-relaxed">
+                  {{this.note}}
+                </p>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+    <div class="p-6 bg-slate-50 border-t border-slate-100 text-center">
+      <p class="text-[9px] text-slate-400 font-medium mb-4 italic px-4 uppercase tracking-tighter">
+        Halaman ini bersifat privat. Silakan hubungi admin jika butuh bantuan lebih lanjut.
+      </p>
+      <a href="/track" class="inline-flex items-center gap-2 px-8 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-slate-600 uppercase tracking-widest hover:bg-slate-100 hover:text-blue-600 transition-all shadow-sm">
+        ← Keluar & Lacak Baru
+      </a>
     </div>
   </div>
-
 </div>
+<script>
+  function copyTrackingID() {
+  const trackingText = document.getElementById('trackingCode').innerText;
+  navigator.clipboard.writeText(trackingText).then(() => {
+    const btn = event.currentTarget;
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<span class="text-[10px] opacity-60">✓</span>';
+    setTimeout(() => {
+      btn.innerHTML = originalHTML;
+    }, 2000);
+  })
+}
+</script>

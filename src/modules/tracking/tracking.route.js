@@ -1,8 +1,10 @@
-const router = require('express').Router()
+const express = require('express')
+const router = express.Router()
+const trackingController = require('./tracking.controller')
 
-const Controller = require('./tracking.controller')
-
-router.get('/', Controller.indexPage)
-router.get('/tracking', Controller.search)
+router.get('/', trackingController.index)
+router.get('/track', trackingController.index)
+router.post('/track', trackingController.track)
+router.get('/track/:id', trackingController.detail)
 
 module.exports = router

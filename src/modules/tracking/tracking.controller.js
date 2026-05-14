@@ -1,85 +1,71 @@
 const TrackingService = require('./tracking.service')
-const Render = require('../../helpers/render.helper')
+const SessionHelper = require('../../helpers/session.helper')
+const ServiceHelper = require('../service/service.helper')
+const HistoryHelper = require('../service_history/service_history.helper')
 
-exports.indexPage = async (req, res) => {
-  return Render.view(
-    res,
-    'pages/tracking/search',
-    {
-      title: 'Tracking Service',
-      layout: 'public'
-    }
-  )
+exports.index = async (req, res) => {
+  return res.render('pages/tracking/index', {
+    layout: 'public',
+    title: 'Lacak Servis',
+    errors: SessionHelper.getFlash(req, 'errors'),
+    old: SessionHelper.getFlash(req, 'old') || {}
+  })
 }
 
-exports.search = async (req, res) => {
+exports.track = async (req, res) => {
+  const { tracking_code, contact_verification } = req.body
+
   try {
-    const tracking_code = req.query.tracking_code
-    const email = req.query.email
-    const phone = req.query.phone
-
-    if (!tracking_code || (!email && !phone)) {
-      return Render.view(
-        res,
-        'pages/tracking/search',
-        {
-          title: 'Tracking Service',
-          layout: 'public',
-          error: 'Tracking code dan email atau nomor HP wajib diisi.',
-          old: {
-            tracking_code,
-            email,
-            phone
-          }
-        }
-      )
-    }
-
-    const service = await TrackingService.search(
-      tracking_code,
-      { email, phone }
-    )
+    const service = await TrackingService.verify(tracking_code, contact_verification)
 
     if (!service) {
-      return Render.view(
-        res,
-        'pages/tracking/search',
-        {
-          title: 'Tracking Service',
-          layout: 'public',
-          error: 'Tracking code tidak ditemukan atau data kontak tidak sesuai.',
-          old: {
-            tracking_code,
-            email,
-            phone
-          }
-        }
-      )
+      SessionHelper.setFlash(req, 'errors', { 
+        auth: ['Kombinasi ID dan Kontak tidak valid.'] 
+      })
+      SessionHelper.setFlash(req, 'old', req.body)
+      return res.redirect('/')
     }
 
-    return Render.view(
-      res,
-      'pages/tracking/detail',
-      {
-        title: 'Tracking Detail',
-        layout: 'public',
-        service
-      }
-    )
-  } catch {
-    return Render.view(
-      res,
-      'pages/tracking/search',
-      {
-        title: 'Tracking Service',
-        layout: 'public',
-        error: 'Terjadi kesalahan saat mencari tracking.',
-        old: {
-          tracking_code: req.query.tracking_code,
-          email: req.query.email,
-          phone: req.query.phone
-        }
-      }
-    )
+    SessionHelper.setFlash(req, 'tracking_access_token', service.tracking_code)
+
+    return res.redirect(`/track/${service.tracking_code}`)
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
+    return res.redirect('/track')
+  }
+}
+
+exports.detail = async (req, res) => {
+  const { id } = req.params
+
+  const accessToken = SessionHelper.getFlash(req, 'tracking_access_token')
+
+  if (!accessToken || accessToken !== id) {
+    SessionHelper.setFlash(req, 'errors', { 
+      auth: ['Sesi berakhir. Silakan masukkan data kembali.'] 
+    })
+    return res.redirect('/track')
+  }
+
+  try {
+    const data = await TrackingService.getDetail(id)
+    const resultService = data.service ? ServiceHelper.getServiceDetail(data.service) : null
+    const resultHistory = data.history ? HistoryHelper.getHistories(data.history) : []
+    
+    return res.render('pages/tracking/detail', {
+      layout: 'public',
+      title: `Detail Servis #${id}`,
+      service: resultService,
+      history: resultHistory
+    })
+  } catch  (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
+    return res.redirect('/track')
   }
 }

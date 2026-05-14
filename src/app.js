@@ -28,14 +28,19 @@ app.engine(
     helpers: {
       formatDate(value) {
         if (!value) return '-'
-
-        return new Date(value).toLocaleDateString('id-ID', {
-          year: 'numeric',
-          month: 'long',
+        const date = new Date(value)
+        const datePart = date.toLocaleDateString('id-ID', {
           day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
+          month: 'long',
+          year: 'numeric'
         })
+        const timePart = date.toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }).replace(/\./g, ':')
+
+        return `${datePart}, ${timePart}`
       },
 
       ifEquals(a, b, options) {

@@ -55,7 +55,19 @@ exports.store = async (req, res) => {
       return Render.redirect(res, '/services')
     }
 
-    await Service.store(req.body)
+    const newService = await Service.store(req.body)
+
+    const serviceDetail = await Service.getById(newService.id)
+    const formattedService = Helper.getServiceDetail(serviceDetail)
+
+    // 3. Kirim Email Nota Digital (Async/Background)
+    MailHelper.sendNewServiceNotification(formattedService.customer_email, {
+      tracking_code: formattedService.tracking_code,
+      customer_name: formattedService.customer_name,
+      device_name: formattedService.device_name,
+      estimated_price: req.body.estimated_price || 0,
+      note: req.body.note || '-'
+    }).catch(err => console.error('Gagal kirim email nota:', err.message))
 
     SessionHelper.setFlash(req, 'success', 'Sukses menambah data servis baru.')
     return Render.redirect(res, '/services')
