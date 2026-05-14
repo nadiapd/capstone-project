@@ -14,7 +14,7 @@ exports.indexPage = async (req, res) => {
 
     return Render.view(
       res,
-      'pages/customers/list',
+      'pages/customers/index',
       {
         title: 'Customers',
         layout: 'main',

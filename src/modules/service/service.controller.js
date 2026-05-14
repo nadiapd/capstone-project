@@ -23,7 +23,7 @@ exports.indexPage = async (req, res) => {
     
     const result = services ? Helper.getServices(services) : []
     
-    return Render.view(res, 'pages/services/list', {
+    return Render.view(res, 'pages/services/index', {
       title: 'Services',
       layout: 'main',
       services: result,
