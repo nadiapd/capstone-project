@@ -1,21 +1,35 @@
 const Validation = require('./admin.validation')
-const Service = require('./admin.service')
+const Admin = require('./admin.service')
 const Render = require('../../helpers/render.helper')
+const Helper = require('./admin.helper')
+const SessionHelper = require('../../helpers/session.helper')
 
 exports.indexPage = async (req, res) => {
   try {
-    const admins = await Service.getAll()
+    const filters = req.query || {}
+
+    const admins = await Admin.getAll(filters)
+
+    const result = Helper.getAdmins(admins)
 
     return Render.view(
       res,
-      'pages/admins/list',
+      'pages/admins/index',
       {
-        title: 'Admins',
+        title: 'Customers',
         layout: 'main',
-        admins
+        admins: result,
+        query: filters,
+        errors: SessionHelper.getFlash(req, 'errors'),
+        old: SessionHelper.getFlash(req, 'old'),
+        success: SessionHelper.getFlash(req, 'success')
       }
     )
-  } catch {
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
     return Render.redirect(
       res,
       '/dashboard'
