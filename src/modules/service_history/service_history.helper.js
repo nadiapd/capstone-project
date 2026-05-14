@@ -1,15 +1,23 @@
 const Helper = require('../service/service.helper')
 
 const getHistories = (histories) => {
-  if (!histories) return []
+  const result = []
 
-  return histories.map(h => ({
-    status_label: Helper.formatStatus[h.status] || 'Unknown',
-    status_color: Helper.statusColors[h.status] || 'bg-slate-100 text-slate-600',
-    note: h.note,
-    updated_by: h.updated_by,
-    created_at: h.createdAt
-  }))
+  Object.values(histories).forEach(
+    (history, index) => {
+      const obj = {}
+
+      obj.status_label = Helper.formatStatus[history.status] || 'Unknown'
+      obj.status_color = Helper.statusColors[history.status] || 'bg-slate-100 text-slate-600'
+      obj.note = history.note || '-'
+      obj.updated_by = history.updated_by
+      obj.created_at = history.createdAt
+
+      result[index] = obj
+    }
+  )
+
+  return result
 }
 
 module.exports = {

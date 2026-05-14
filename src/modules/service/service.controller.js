@@ -6,6 +6,8 @@ const HistoryService = require('../service_history/service_history.service')
 const Render = require('../../helpers/render.helper')
 const Helper = require('./service.helper')
 const HistoryHelper = require('../service_history/service_history.helper')
+const SessionHelper = require('../../helpers/session.helper')
+const MailHelper = require('../../helpers/mail.helper')
 
 exports.indexPage = async (req, res) => {
   try {
@@ -33,24 +35,6 @@ exports.indexPage = async (req, res) => {
     return Render.redirect(res, '/dashboard')
   }
 }
-
-// exports.createPage = async (req, res) => {
-//   try {
-//     return Render.view(
-//       res,
-//       'pages/services/create',
-//       {
-//         title: 'Create Service',
-//         layout: 'main'
-//       }
-//     )
-//   } catch  {
-//     return Render.redirect(
-//       res,
-//       '/services'
-//     )
-//   }
-// }
 
 exports.store = async (req, res) => {
   try {
@@ -104,7 +88,9 @@ exports.detailPage = async (req, res) => {
       {
         title: 'Service Detail',
         layout: 'main',
-        service: result
+        service: result,
+        errors: SessionHelper.getFlash(req, 'errors'),
+        old: SessionHelper.getFlash(req, 'old')
       }
     )
   } catch {
@@ -115,15 +101,59 @@ exports.detailPage = async (req, res) => {
   }
 }
 
-exports.updateStatus = async (req, res) => {
+exports.update = async (req, res) => {
   try {
+    const validation = Validation.update(req.body)
+
+    if (validation.fails()) {
+      SessionHelper.setFlash(req, 'errors', validation.errors.all())
+      SessionHelper.setFlash(req, 'old', req.body)
+  
+      return Render.redirect(res, `/services/${req.params.id}`)
+    }
+    const service = await Service.getById(req.params.id)
+    const serviceData = service ? Helper.getServiceDetail(service) : null
+
+    if (!serviceData) {
+      return res.status(404).send('Data servis tidak ditemukan')
+    }
+
+    const cleanTotalPrice = req.body.total_price && req.body.total_price !== '' ? req.body.total_price : null
+
     await Service.updateStatus(
       req.params.id,
       req.body.status,
       req.body.note,
-      req.admin?.name || 'System'
+      req.admin?.name || 'System',
+      cleanTotalPrice
     )
 
+    if (req.body.status === '3' || req.body.status === 3) {
+      MailHelper.sendReadyNotification(serviceData.customer_email, {
+        tracking_code: serviceData.tracking_code,
+        customer_name: serviceData.customer_name,
+        device_name: serviceData.device_name,
+        total_cost: req.body.total_price
+      }).then(() => {
+        console.log(`✅ Email notifikasi terkirim ke: ${serviceData.customer_email}`)
+        return Render.redirect(
+          res,
+          `/services/${req.params.id}`
+        )
+      }).catch(err => {
+        return Render.view(
+          res,
+          'pages/services/detail',
+          {
+            title: 'Service Detail',
+            layout: 'main',
+            service: result,
+            errors: SessionHelper.getFlash(req, 'errors'),
+            old: SessionHelper.getFlash(req, 'old')
+          }
+        )
+      })
+    }
     return Render.redirect(
       res,
       `/services/${req.params.id}`
@@ -175,12 +205,14 @@ exports.historyPage = async (req, res) => {
       )
     }
 
+    const resultService = service ? Helper.getServiceDetail(service) : null
+
     const histories =
       await HistoryService.getByServiceId(
         req.params.id
       )
 
-    const result = histories ? HistoryHelper.getHistories(histories) : []
+    const resultHistory = histories ? HistoryHelper.getHistories(histories) : []
 
     return Render.view(
       res,
@@ -188,8 +220,8 @@ exports.historyPage = async (req, res) => {
       {
         title: 'Service History',
         layout: 'main',
-        service,
-        histories: result
+        service: resultService,
+        histories: resultHistory
       }
     )
   } catch {

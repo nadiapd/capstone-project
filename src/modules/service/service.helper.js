@@ -62,6 +62,8 @@ const getServiceDetail = service => {
     device_brand: service.device_brand,
     device_category: service.device_category_other ? 'Lainnya/' + service.device_category_other : service.device_category,
     note: service.note,
+    estimated_price: service.estimated_price,
+    total_price: service.total_price,
     status: service.status,
     status_label: formatStatus[service.status] || 'Unknown',
     status_color: statusColors[service.status] || 'bg-slate-100 text-slate-600',
@@ -71,6 +73,8 @@ const getServiceDetail = service => {
 }
 
 module.exports = {
+  formatStatus,
+  statusColors,
   getServices,
   getServiceDetail,
   formatStatus

@@ -7,9 +7,12 @@
             <h2 class="text-2xl font-black text-slate-900 tracking-tight">Riwayat Progress</h2>
             <p class="text-slate-500 text-sm italic">Tracking ID: #{{service.tracking_code}}</p>
         </div>
-        <div class="bg-white px-5 py-3 rounded-2xl border border-slate-100 shadow-sm">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Status Saat Ini</p>
-            <span class="text-sm font-black uppercase {{service.status_color}}">{{service.status_label}}</span>
+        <div class="flex flex-col gap-1">
+            <p class="text-[10px] text-right font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Status Saat Ini</p>
+            <span
+        class="px-4 py-1.5 text-center rounded-full text-[11px] font-black uppercase tracking-widest {{service.status_color}} shadow-sm border border-white/20">
+        {{service.status_label}}
+      </span>
         </div>
     </div>
 
@@ -27,7 +30,7 @@
 
                 {{!-- Card Riwayat --}}
                 <div class="w-full md:w-[45%] {{#if (isEven @index)}} md:ml-auto md:pl-8 {{else}} md:mr-auto md:pr-8 md:text-right {{/if}} ml-10 md:ml-0">
-                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/40 hover:border-blue-200 transition-all group">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 drop-shadow-xl shadow-slate-200/40 hover:border-blue-200 transition-all group">
                         {{!-- Badge Status dalam Card --}}
                         <div class="flex items-center gap-3 mb-3 {{#unless (isEven @index)}} md:justify-end {{/unless}}">
                             <span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-tighter {{this.status_color}}">
@@ -37,7 +40,7 @@
                         </div>
 
                         <h4 class="text-slate-900 font-bold text-sm mb-2 group-hover:text-blue-600 transition-colors">
-                            {{#if this.note}}{{this.note}}{{else}}Update status pengerjaan unit.{{/if}}
+                            {{ this.note }}
                         </h4>
 
                         <div class="flex items-center gap-2 {{#unless (isEven @index)}} md:justify-end {{/unless}} mt-4 pt-4 border-t border-slate-50">

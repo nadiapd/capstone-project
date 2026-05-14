@@ -7,7 +7,7 @@ router.get('/', Controller.indexPage)
 router.post('/store', Controller.store)
 router.get('/:id', Controller.detailPage)
 router.get('/:id/progress', Controller.progressPage)
-router.post('/:id/update', Controller.updateStatus)
+router.post('/:id/update', Controller.update)
 router.get('/:id/history', Controller.historyPage)
 
 module.exports = router

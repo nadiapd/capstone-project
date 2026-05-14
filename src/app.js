@@ -55,6 +55,10 @@ app.engine(
       eq(a, b) {
         return String(a || '') === String(b || '')
       },
+
+      or(a, b) {
+        return String(a || '') || String(b || '')
+      },
       
       isEven(idx) {
         return idx % 2 === 0

@@ -64,44 +64,39 @@
       <table class="w-full text-left border-collapse">
         <thead>
           <tr class="bg-slate-50/50 border-b border-slate-100">
-            {{!-- Kolom Tracking --}}
             <th class="px-8 py-5">
               <a href="/services?{{#if query.q}}q={{query.q}}&{{/if}}sortBy=tracking_code&sortOrder={{#if (eq query.sortOrder 'ASC')}}DESC{{else}}ASC{{/if}}"
-                class="flex items-center text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-blue-600">
+                class="flex items-center text-xs uppercase tracking-widest hover:text-blue-600 whitespace-nowrap 
+                {{#if (eq query.sortBy 'tracking_code')}}text-slate-900 font-black{{else}}text-slate-400 font-bold{{/if}}">
                 Tracking {{#if (eq query.sortBy 'tracking_code')}}{{#if (eq query.sortOrder
-                'ASC')}}↑{{else}}↓{{/if}}{{else}}⇅{{/if}}
+                'ASC')}}↑{{else}}↓{{/if}}{{else}}↑↓{{/if}}
               </a>
             </th>
-
             <th class="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest">Pelanggan</th>
-
-            {{!-- Kolom Status --}}
             <th class="px-6 py-5 text-center">
               <a href="/services?{{#if query.q}}q={{query.q}}&{{/if}}sortBy=status&sortOrder={{#if (eq query.sortOrder 'ASC')}}DESC{{else}}ASC{{/if}}"
-                class="flex justify-center items-center text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-blue-600">
+                class="flex justify-center items-center text-xs uppercase tracking-widest hover:text-blue-600 whitespace-nowrap
+                {{#if (eq query.sortBy 'status')}}text-slate-900 font-black{{else}}text-slate-400 font-bold{{/if}}">
                 Status {{#if (eq query.sortBy 'status')}}{{#if (eq query.sortOrder
-                'ASC')}}↑{{else}}↓{{/if}}{{else}}⇅{{/if}}
+                'ASC')}}↑{{else}}↓{{/if}}{{else}}↑↓{{/if}}
               </a>
             </th>
-
-            {{!-- Kolom Created At --}}
             <th class="px-6 py-5">
               <a href="/services?{{#if query.q}}q={{query.q}}&{{/if}}sortBy=createdAt&sortOrder={{#if (eq query.sortOrder 'ASC')}}DESC{{else}}ASC{{/if}}"
-                class="flex items-center text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-blue-600">
+                class="flex items-center text-xs uppercase tracking-widest hover:text-blue-600 whitespace-nowrap
+                {{#if (eq query.sortBy 'createdAt')}}text-slate-900 font-black{{else}}text-slate-400 font-bold{{/if}}">
                 Masuk {{#if (eq query.sortBy 'createdAt')}}{{#if (eq query.sortOrder
-                'ASC')}}↑{{else}}↓{{/if}}{{else}}⇅{{/if}}
+                'ASC')}}↑{{else}}↓{{/if}}{{else}}↑↓{{/if}}
               </a>
             </th>
-
-            {{!-- Kolom Updated At --}}
             <th class="px-6 py-5">
               <a href="/services?{{#if query.q}}q={{query.q}}&{{/if}}sortBy=updatedAt&sortOrder={{#if (eq query.sortOrder 'ASC')}}DESC{{else}}ASC{{/if}}"
-                class="flex items-center text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-blue-600">
+                class="flex items-center text-xs uppercase tracking-widest hover:text-blue-600 whitespace-nowrap
+                {{#if (eq query.sortBy 'updatedAt')}}text-slate-900 font-black{{else}}text-slate-400 font-bold{{/if}}">
                 Update {{#if (eq query.sortBy 'updatedAt')}}{{#if (eq query.sortOrder
-                'ASC')}}↑{{else}}↓{{/if}}{{else}}⇅{{/if}}
+                'ASC')}}↑{{else}}↓{{/if}}{{else}}↑↓{{/if}}
               </a>
             </th>
-
             <th class="px-8 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Aksi</th>
           </tr>
         </thead>
@@ -109,20 +104,30 @@
           {{#each services}}
           <tr class="hover:bg-blue-50/30 transition-colors group">
             <td class="px-8 py-6">
-              <span class="font-mono text-sm font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg">
+              <span class="font-mono text-xs whitespace-nowrap font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg">
                 {{this.tracking_code}}
               </span>
             </td>
             <td class="px-6 py-6">
-              <p class="font-bold text-slate-900">{{this.customer_name}}</p>
-              <p class="text-xs text-slate-500">
-                {{#if this.device_category_other}}{{this.device_category_other}}{{else}}{{this.device_category}}{{/if}}
-                • {{this.device_name}}
-              </p>
+              <div class="flex items-center gap-3">
+                <div class="flex flex-col min-w-0">
+                  <p class="font-bold text-slate-900 text-sm truncate leading-tight mb-0.5" title="{{this.customer_name}}">
+                    {{this.customer_name}}
+                  </p>
+                  <div class="flex items-center gap-1.5">
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-100 text-slate-500 uppercase tracking-wider">
+                      {{#if this.device_category_other}}{{this.device_category_other}}{{else}}{{this.device_category}}{{/if}}
+                    </span>
+                    <span class="text-[11px] text-slate-400 truncate font-medium">
+                      {{this.device_name}}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </td>
             <td class="px-6 py-6 text-center">
               <span
-                class="inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter {{this.status_color}}">
+                class="whitespace-nowrap inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter {{this.status_color}}">
                 {{this.status_label}}
               </span>
             </td>
@@ -180,10 +185,11 @@
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Cari /
                   Tambah Nama</label>
                 <select rules="required" id="customer-select" name="customer_id" placeholder="Cari nama..."
-                  autocomplete="off">
+                  autocomplete="off" fieldname="Nama Pelanggan">
                   <option value="">Cari nama atau tambah baru...</option>
                   {{#each customers}}
-                  <option value="{{this.id}}" data-phone="{{this.phone}}" data-email="{{this.email}}">{{this.name}}</option>
+                  <option value="{{this.id}}" data-phone="{{this.phone}}" data-email="{{this.email}}">{{this.name}}
+                  </option>
                   {{/each}}
                 </select>
                 <input type="hidden" name="customer_name" id="hidden_customer_name">
@@ -241,8 +247,9 @@
                   <span
                     class="top-2.5 absolute z-[1] pl-4 text-slate-400 font-bold text-sm group-focus-within:text-blue-600 transition-colors">Rp</span>
                   <div class="w-full">
-                    <input type="number" name="estimated_cost" rules="required" fieldname="Estimasi Biaya" placeholder="0"
-                    class="w-full pl-10 bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
+                    <input type="number" name="estimated_price" rules="required" fieldname="Estimasi Biaya"
+                      placeholder="0"
+                      class="w-full pl-10 bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
                   </div>
                 </div>
               </div>

@@ -140,14 +140,29 @@ exports.store = async payload => {
   delete cleanPayload.customer_email
   delete cleanPayload.customer_phone
 
-  return await Model.create(cleanPayload)
+  // 5. SIMPAN DATA SERVIS
+  const newService = await Model.create(cleanPayload)
+
+  /**
+   * 6. OTOMATIS TAMBAH KE HISTORY
+   * Setelah servis tercipta, kita buat record di tabel history.
+   */
+  await HistoryModel.create({
+    service_id: newService.id,
+    status: 1, // Sesuai dengan status awal
+    note: payload.note || 'Unit masuk pertama kali (Pendaftaran)',
+    updated_by: 'System' // Atau ambil dari req.user.name jika ada session
+  })
+
+  return newService
 }
 
 exports.updateStatus = async (
   id,
   status,
   note,
-  updatedBy
+  updatedBy,
+  totalPrice
 ) => {
 
   const service = await Model.findByPk(id)
@@ -157,6 +172,10 @@ exports.updateStatus = async (
   }
 
   service.status = status
+
+  if (totalPrice && totalPrice !== undefined) {
+    service.total_price = totalPrice
+  }
 
   await service.save()
 

@@ -1,5 +1,5 @@
 <div class="max-w-5xl mx-auto">
-  {{!-- Header Section Tetap Sama --}}
+  {{!-- Header Section --}}
   <div class="flex justify-between items-center mb-8">
     <div class="flex flex-col gap-1">
       <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Detail Servis</h2>
@@ -10,206 +10,350 @@
     </div>
     <div class="flex gap-2">
       <span
-        class="px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest {{service.status_color}} shadow-sm border border-white/20">
+        class="px-4 py-1.5 text-center rounded-full text-[11px] font-black uppercase tracking-widest {{service.status_color}} shadow-sm border border-white/20">
         {{service.status_label}}
       </span>
     </div>
   </div>
-
-  {{!-- Main Info Card --}}
-  <div class="bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden mb-8">
-    <div class="p-8 md:p-10">
-      {{!-- Meta Data Row --}}
-      <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-10 pb-10 border-b border-slate-50">
-        <div>
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Tracking ID</p>
-          <span class="font-mono text-xl font-black text-blue-600 bg-blue-50 px-4 py-2 rounded-xl">
-            #{{service.tracking_code}}
-          </span>
-        </div>
-        <div class="md:text-right">
-          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Waktu Pendaftaran</p>
-          <p class="text-slate-700 font-bold text-lg">{{formatDate service.created_at}}</p>
-        </div>
+  {{!-- Letakkan di dalam <form id="update-service-form"> --}}
+    {{#if errors}}
+    <div id="errors-container" class="mb-6 flex items-start p-4 bg-red-50 rounded-xl drop-shadow animate-fade-in">
+      {{!-- Icon --}}
+      <div class="flex-shrink-0 bg-red-100 rounded-lg p-1.5 mr-3 mt-0.5">
+        <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+          </path>
+        </svg>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {{!-- Data Customer --}}
-        <div>
-          <h3 class="flex items-center gap-2 text-blue-600 text-sm font-black uppercase tracking-widest mb-6">
-            <span class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-xs">👤</span>
-            Informasi Pelanggan
-          </h3>
-          <div class="space-y-5">
-            <div class="flex flex-col gap-1">
-              <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Nama Pelanggan</span>
-              <p class="text-slate-900 font-extrabold text-base">{{service.customer_name}}</p>
-            </div>
-            <div class="flex flex-col gap-1">
-              <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Email Address</span>
-              <p class="text-slate-700 font-semibold">{{service.customer_email}}</p>
-            </div>
-            <div class="flex flex-col gap-1">
-              <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Nomor WhatsApp</span>
-              <p class="text-slate-700 font-semibold">{{service.customer_phone}}</p>
-            </div>
-          </div>
-        </div>
+      {{!-- Error Messages --}}
+      <div class="flex-1">
+        <p class="text-sm font-black text-red-800 uppercase tracking-tight mb-1">Terjadi Kesalahan</p>
+        <ul class="list-disc list-inside">
+          {{#each errors}}
+          <li class="text-[11px] text-red-700 font-bold leading-relaxed">{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
 
-        {{!-- Detail Perangkat --}}
-        <div>
-          <h3 class="flex items-center gap-2 text-blue-600 text-sm font-black uppercase tracking-widest mb-6">
-            <span class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-xs">💻</span>
-            Spesifikasi Unit
-          </h3>
-          <div class="space-y-4">
-            {{!-- <div class="flex justify-between items-center pb-3 border-b border-slate-200/60">
-              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Brand Perangkat</span>
-              <span class="text-sm text-slate-900 font-black uppercase">{{service.device_brand}}</span>
-            </div> --}}
-            <div class="flex justify-between items-center pb-3 border-b border-slate-200/60">
-              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Nama Perangkat</span>
-              <span class="text-sm text-slate-900 font-bold">{{service.device_name}}</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Kategori</span>
+      {{!-- Close Button --}}
+      <button type="button" onclick="closeErrorManual()"
+        class="ml-auto text-red-400 hover:text-red-600 transition-colors p-1">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    {{/if}}
+    {{!-- Main Info Card --}}
+    <div class="bg-white rounded-xl border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden mb-8">
+      <div class="p-8 md:p-10">
+        {{!-- Meta Data Row --}}
+        <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-10 pb-10 border-b border-slate-50">
+          <div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Tracking ID</p>
+            <div class="flex items-center gap-2 group">
               <span
-                class="px-3 py-1 bg-blue-600 text-white text-[10px] rounded-md font-black uppercase shadow-sm shadow-blue-200">
-                {{service.device_category}}
+                class="font-mono text-lg font-black text-blue-600 bg-blue-50 px-4 py-1.5 rounded-xl flex items-center gap-3 border border-blue-100">
+                <span id="trackingCode">#{{service.tracking_code}}</span>
+                <button onclick="copyTrackingID()"
+                  class="p-1.5 hover:bg-blue-100 rounded-lg text-blue-400 hover:text-blue-600 transition-all active:scale-90"
+                  title="Salin Kode">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </button>
               </span>
             </div>
           </div>
+          <div class="md:text-right">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Waktu Pendaftaran</p>
+            <p class="text-slate-700 font-bold text-lg">{{formatDate service.created_at}}</p>
+          </div>
         </div>
-      </div>
 
-      {{!-- Deskripsi Kerusakan --}}
-      <div class="mt-12 pt-8 border-t border-slate-50">
-        <h3 class="flex items-center gap-2 text-blue-600 text-sm font-black uppercase tracking-widest mb-6">
-          <span class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-xs">📝</span>
-          Deskripsi Kerusakan
-        </h3>
-        <div class="bg-blue-50/30 border border-blue-100/50 rounded-xl p-6">
-          <p class="text-slate-700 leading-relaxed">
-            {{service.note}}
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  {{!-- Action Card Tetap Sama --}}
-  <div class="bg-slate-900 rounded-2xl p-8 md:p-10 shadow-2xl shadow-blue-900/20 relative overflow-hidden">
-    <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
-    <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-      <div>
-        <h3 class="text-white text-xl font-bold">Update Progres Unit</h3>
-        <p class="text-slate-400 text-sm">Informasikan status perbaikan terbaru kepada pemilik unit.</p>
-      </div>
-      <div class="flex gap-3 w-full md:w-auto">
-        <a href="/services/{{service.id}}/history"
-          class="flex-1 md:flex-none text-center px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold text-sm transition-all border border-slate-700">
-          Riwayat
-        </a>
-        <button onclick="openModalUpdate()"
-          class="flex-1 md:flex-none px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-600/30 transition-all">
-          Update Progress →
-        </button>
-      </div>
-    </div>
-  </div>
-  <div id="updateStatusModal" class="fixed inset-0 z-[100] hidden">
-    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
-
-    <div class="flex items-center justify-center min-h-screen p-4">
-      <div
-        class="relative bg-white w-full max-w-lg rounded-[2rem] shadow-2xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300"
-        id="modalContainer">
-
-        <div class="p-8 pb-4 flex justify-between items-start">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {{!-- Data Customer --}}
           <div>
-            <h3 class="text-xl font-black text-slate-900">Update Progress</h3>
-            <p class="text-xs text-slate-400 mt-1 font-medium italic">Tracking: #{{service.tracking_code}}</p>
+            <h3 class="flex items-center gap-2 text-blue-600 text-sm font-black uppercase tracking-widest mb-6">
+              <span class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-xs">👤</span>
+              Informasi Pelanggan
+            </h3>
+            <div class="space-y-5">
+              <div class="flex flex-col gap-1">
+                <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Nama Pelanggan</span>
+                <p class="text-slate-900 font-extrabold text-base">{{service.customer_name}}</p>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Email Address</span>
+                <p class="text-slate-700 font-semibold">{{service.customer_email}}</p>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Nomor WhatsApp</span>
+                <p class="text-slate-700 font-semibold">{{service.customer_phone}}</p>
+              </div>
+            </div>
           </div>
-          <button onclick="closeModalUpdate()"
-            class="text-slate-400 hover:text-red-500 transition-colors text-2xl">&times;</button>
+
+          {{!-- Detail Perangkat --}}
+          <div>
+            <h3 class="flex items-center gap-2 text-blue-600 text-sm font-black uppercase tracking-widest mb-6">
+              <span class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-xs">💻</span>
+              Informasi Perangkat
+            </h3>
+            <div class="space-y-4">
+              <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Merk & Tipe</span>
+                <span class="text-sm text-slate-900 font-bold">{{service.device_name}}</span>
+              </div>
+              <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Kategori</span>
+                <span class="px-2.5 py-0.5 bg-slate-100 text-slate-600 text-[10px] rounded font-black uppercase">
+                  {{service.device_category}}
+                </span>
+              </div>
+              <div class="flex flex-col gap-2 pt-2">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Deskripsi Kerusakan</span>
+                <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">
+                  <p class="text-sm text-slate-700 leading-relaxed italic">"{{service.note}}"</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <form id="update-service-form" action="/services/{{service.id}}/update" method="POST" class="p-8 pt-4">
-          <div class="space-y-6">
-            {{!-- Pilih Status --}}
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Pilih Status
-                Terbaru <span class="text-red-600">*</span></label>
-              <select name="status" rules="required" fieldname="Status" required
-                class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
-                <option value="1" {{#if (eq service.status 1)}}{{/if}} disabled>Baru (Unit Masuk)</option>
-                <option value="2" {{#if (eq service.status 2)}}selected{{/if}}>Proses Perbaikan</option>
-                <option value="3" {{#if (eq service.status 3)}}selected{{/if}}>Siap Ambil (Selesai)</option>
-                <option value="4" {{#if (eq service.status 4)}}selected{{/if}}>Sudah Diambil (Arsip)</option>
-                <option value="5" {{#if (eq service.status 5)}}selected{{/if}}>Dibatalkan</option>
-              </select>
+        {{!-- Informasi Biaya --}}
+        <div class="mt-12 pt-8 border-t-2 border-dashed border-slate-100">
+          <h3 class="flex items-center gap-2 text-blue-600 text-sm font-black uppercase tracking-widest mb-6">
+            <span class="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-xs">💰</span>
+            Informasi Biaya
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-6 rounded-xl bg-slate-50 border border-slate-100">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Harga Estimasi</p>
+              <p class="text-xl font-bold text-slate-600">{{formatCurrency service.estimated_price}}</p>
             </div>
-
-            {{!-- Catatan / Note --}}
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Catatan
-                Pengerjaan (Optional) <span class="text-red-600">*</span></label>
-              <textarea rules="required" fieldname="Catatan Pengerjaan" name="note" rows="3" placeholder="Contoh: Penggantian LCD selesai, sedang tahap testing..."
-                class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all resize-none"></textarea>
+            <div class="p-6 rounded-xl bg-blue-600 shadow-lg shadow-blue-200">
+              <p class="text-[10px] font-bold text-blue-200 uppercase tracking-widest mb-1">Total Biaya Akhir</p>
+              <p class="text-2xl font-black text-white">
+                {{#if service.total_price}}
+                {{formatCurrency service.total_price}}
+                {{else}}
+                -
+                {{/if}}
+              </p>
             </div>
           </div>
-
-          {{!-- Tombol Aksi --}}
-          <div class="mt-8 flex gap-3">
-            <button type="button" onclick="closeModalUpdate()"
-              class="flex-1 px-6 py-3 bg-slate-100 text-slate-500 rounded-xl font-bold text-sm hover:bg-slate-200 transition-all">
-              Batal
-            </button>
-            <button type="submit"
-              class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all">
-              Simpan Perubahan
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
+
+    {{!-- Action Card --}}
+    <div class="bg-slate-900 rounded-2xl p-8 md:p-10 shadow-2xl shadow-blue-900/20 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+      <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <h3 class="text-white text-xl font-bold">Update Progres Unit</h3>
+          <p class="text-slate-400 text-sm">Update status pengerjaan atau tentukan biaya akhir servis.</p>
+        </div>
+        <div class="flex gap-3 w-full md:w-auto">
+          <a href="/services/{{service.id}}/history"
+            class="flex-1 md:flex-none text-center px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold text-sm transition-all border border-slate-700">
+            Riwayat
+          </a>
+          <button onclick="openModalUpdate()"
+            {{#if (or (eq service.status 4) (eq service.status 5))}} disabled {{/if}}
+            class="flex-1 md:flex-none px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-600/30 transition-all
+            disabled:bg-gray-400 disabled:text-gray-200 disabled:cursor-not-allowed disabled:shadow-none">
+            Update Progress →
+          </button>
+        </div>
+      </div>
+    </div>
+    {{!-- MODAL UPDATE --}}
+    <div id="updateStatusModal" class="fixed inset-0 z-[100] hidden">
+      <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div
+          class="relative bg-white w-full max-w-lg rounded-xl shadow-2xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300"
+          id="modalContainer">
+
+          <div class="p-8 pb-4 flex justify-between items-start">
+            <div>
+              <h3 class="text-xl font-black text-slate-900">Update Progress</h3>
+              <p class="text-xs text-slate-400 mt-1 font-medium italic">Tracking ID: #{{service.tracking_code}}</p>
+            </div>
+            <button onclick="closeModalUpdate()"
+              class="text-slate-400 hover:text-red-500 transition-colors text-2xl">&times;</button>
+          </div>
+
+          <form id="update-service-form" action="/services/{{service.id}}/update" method="POST" class="p-8 pt-4">
+            <div class="space-y-6">
+              {{!-- Pilih Status --}}
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Pilih
+                  Status
+                  Terbaru <span class="text-red-600">*</span></label>
+                <select id="status-select" name="status" rules="required" fieldname="Status" required
+                  class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
+                  <option value="1" {{#if (eq service.status 1)}}{{/if}} disabled>Baru (Unit Masuk)</option>
+                  <option value="2" {{#if (eq service.status 2)}}selected{{/if}}>Proses Perbaikan</option>
+                  <option value="3" {{#if (eq service.status 3)}}selected{{/if}}>Siap Ambil (Selesai)</option>
+                  <option value="4" {{#if (eq service.status 4)}}selected{{/if}}>Sudah Diambil (Arsip)</option>
+                  <option value="5" {{#if (eq service.status 5)}}selected{{/if}}>Dibatalkan</option>
+                </select>
+              </div>
+
+              {{!-- Catatan / Note --}}
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Catatan
+                  Pengerjaan<span class="text-red-600">*</span></label>
+                <textarea rules="required|min:5" fieldname="Catatan Pengerjaan" name="note" rows="3"
+                  placeholder="Contoh: Penggantian LCD selesai, sedang tahap testing..."
+                  class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all resize-none"></textarea>
+              </div>
+              {{!-- Input Total Biaya (Muncul jika Siap Ambil) --}}
+              <div id="total-cost-container" class="hidden animate-fade-in">
+                <label class="block text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-2 ml-1">Total Biaya
+                  Akhir <span class="text-red-600">*</span></label>
+                <div class="flex gap-2 items-center group relative">
+                  <span
+                    class="top-2.5 absolute z-[1] pl-4 text-slate-400 font-bold text-sm group-focus-within:text-blue-600 transition-colors">Rp</span>
+                  <div class="w-full">
+                    <input type="number" name="total_price" rules="required" fieldname="Total Biaya Akhir"
+                      placeholder="0"
+                      class="w-full pl-10 bg-slate-50 border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:pointer-events-none disabled:opacity-80">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {{!-- Tombol Aksi --}}
+            <div class="mt-8 flex gap-3">
+              <button type="button" onclick="closeModalUpdate()"
+                class="flex-1 px-6 py-3 bg-slate-100 text-slate-500 rounded-xl font-bold text-sm hover:bg-slate-200 transition-all">
+                Batal
+              </button>
+              <button type="submit"
+                class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all">
+                Simpan Perubahan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 </div>
 <script>
-    const modal = document.getElementById('updateStatusModal');
-    const container = document.getElementById('modalContainer');
+  const modal = document.getElementById('updateStatusModal');
+  const container = document.getElementById('modalContainer');
 
-    function openModalUpdate() {
-        modal.classList.remove('hidden');
-        // Delay sedikit agar animasi transition scale & opacity berjalan
-        setTimeout(() => {
-            container.classList.remove('scale-95', 'opacity-0');
-            container.classList.add('scale-100', 'opacity-100');
-        }, 10);
+  function openModalUpdate() {
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      container.classList.remove('scale-95', 'opacity-0');
+      container.classList.add('scale-100', 'opacity-100');
+    }, 10);
+  }
+
+  function closeModalUpdate() {
+    container.classList.remove('scale-100', 'opacity-100');
+    container.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 300);
+  }
+
+  function closeErrorManual() {
+    const errorBox = document.getElementById('errors-container');
+    if (errorBox) {
+      // Tambahkan efek fade out (opsional jika menggunakan tailwind)
+      errorBox.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+
+      // Hapus elemen setelah animasi selesai
+      setTimeout(() => {
+        errorBox.style.display = 'none';
+      }, 500);
+    }
+  }
+
+  function copyTrackingID() {
+    const trackingText = document.getElementById('trackingCode').innerText.replace('#', '');
+    navigator.clipboard.writeText(trackingText).then(() => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Kode Disalin!',
+        text: trackingText,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        background: '#ffffff',
+        iconColor: '#2563eb'
+      });
+    }).catch(err => {
+      console.error('Gagal menyalin: ', err);
+    });
+  }
+
+  // Handle click di luar modal
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      closeModalUpdate();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const errorBox = document.getElementById('errors-container');
+
+    // Jika ada elemen error, jalankan timer 5 detik
+    if (errorBox) {
+      setTimeout(() => {
+        closeErrorManual();
+      }, 5000); // 5000ms = 5 Detik
     }
 
-    function closeModalUpdate() {
-        container.classList.remove('scale-100', 'opacity-100');
-        container.classList.add('scale-95', 'opacity-0');
-        
-        // Sembunyikan modal setelah animasi selesai (300ms)
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 300);
-    }
-
-    // Tutup modal jika user klik di area luar modal (backdrop)
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            closeModalUpdate();
-        }
-    }
-    document.addEventListener('DOMContentLoaded', () => {
+    // 1. Membersihkan URL Parameter
     if (window.history.replaceState) {
-        const url = new URL(window.location.href);
-        url.searchParams.delete('message');
-        window.history.replaceState({path: url.href}, '', url.href);
+      const url = new URL(window.location.href);
+      url.searchParams.delete('message');
+      url.searchParams.delete('status');
+      window.history.replaceState({ path: url.href }, '', url.href);
     }
+
+    // 2. Inisialisasi Validasi
     initLiveValidation('#update-service-form');
+
+    // 3. Logika Dinamis Total Biaya
+    const statusSelect = document.getElementById('status-select');
+    const totalCostContainer = document.getElementById('total-cost-container');
+
+    const toggleCostInput = () => {
+      const totalPriceInput = document.querySelector('input[name="total_price"]');
+
+      // Munculkan jika status "Siap Ambil" (3) atau "Sudah Diambil" (4)
+      if (statusSelect.value === '3') {
+        totalCostContainer.classList.remove('hidden');
+        // Tambahkan aturan wajib jika status selesai
+        totalPriceInput.setAttribute('rules', 'required');
+      } else {
+        totalCostContainer.classList.add('hidden');
+        // Hapus aturan wajib jika status masih proses/batal
+        totalPriceInput.removeAttribute('rules');
+        // Opsional: kosongkan nilainya jika disembunyikan
+        totalPriceInput.value = '';
+      }
+    };
+
+    statusSelect.addEventListener('change', toggleCostInput);
+
+    // Jalankan saat pertama load (antisipasi jika status awal memang sudah selesai)
+    toggleCostInput();
+
   });
 </script>

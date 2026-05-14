@@ -7,6 +7,6 @@ exports.store = async payload => {
 exports.getByServiceId = async serviceId => {
   return await Model.findAll({
     where: { service_id: serviceId },
-    order: [['createdAt', 'ASC']]
+    order: [['createdAt', 'DESC']]
   })
 }
