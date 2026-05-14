@@ -9,16 +9,13 @@
       + Tambah Baru
     </button>
   </div>
-
   <div class="bg-white p-6 rounded-xl border border-slate-100 drop-shadow-md mb-8">
     <form action="/services" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
       <div class="md:col-span-1">
         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Cari</label>
         <input type="text" name="q" value="{{query.q}}" placeholder="Kode/Nama/Brand..."
           class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
       </div>
-
       <div>
         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">
           Kategori
@@ -48,7 +45,6 @@
           <option value="4" {{#if (eq query.status '4' )}}selected{{/if}}>Selesai</option>
         </select>
       </div>
-
       <div class="col-span-3 flex justify-end gap-2">
         <button type="submit" title="Terapkan Filter"
           class="flex-1 bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-slate-800 transition-all">
@@ -61,7 +57,6 @@
       </div>
     </form>
   </div>
-
   <div class="bg-white rounded-xl drop-shadow-md shadow-slate-200/50 border border-slate-100 overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
@@ -156,7 +151,6 @@
         </tbody>
       </table>
     </div>
-
     {{#unless services}}
     <div class="p-20 text-center">
       <p class="text-slate-400 font-medium">Belum ada data servis masuk.</p>
@@ -165,18 +159,15 @@
   </div>
   <div id="createServiceModal" class="fixed inset-0 z-[100] hidden">
     <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
-
     <div class="flex items-center justify-center min-h-screen p-4">
       <div
         class="relative bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300"
         id="createModalContainer">
-
         <div class="p-8 pb-4 flex justify-between items-center">
           <h3 class="text-xl font-black text-slate-900 tracking-tight">Tambah Servis Baru</h3>
           <button onclick="closeCreateModal()"
             class="text-slate-400 hover:text-red-500 transition-colors text-2xl">&times;</button>
         </div>
-
         <form id="create-service-form" action="/services/store" method="POST" class="p-8 pt-4">
           <div class="flex flex-col gap-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -258,7 +249,6 @@
               </div>
             </div>
           </div>
-
           <div class="mt-8 flex gap-3">
             <button type="button" onclick="closeCreateModal()"
               class="flex-1 py-3 bg-slate-100 text-slate-500 rounded-lg font-bold text-sm hover:bg-slate-200 transition-all">Batal</button>
@@ -272,11 +262,9 @@
   </div>
 </div>
 <script>
-  // Global Variables untuk Modal
   const createModal = document.getElementById('createServiceModal');
   const createContainer = document.getElementById('createModalContainer');
 
-  // Fungsi Open Modal
   function openCreateModal() {
     createModal.classList.remove('hidden');
     setTimeout(() => {
@@ -285,7 +273,6 @@
     }, 10);
   }
 
-  // Fungsi Close Modal
   function closeCreateModal() {
     createContainer.classList.remove('scale-100', 'opacity-100');
     createContainer.classList.add('scale-95', 'opacity-0');
@@ -297,7 +284,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     initLiveValidation('#create-service-form');
     const phoneInput = document.getElementById('customer_phone');
-    const emailInput = document.getElementById('customer_email'); // Target baru
+    const emailInput = document.getElementById('customer_email');
     const hiddenNameInput = document.getElementById('hidden_customer_name');
 
     const selectEl = document.getElementById('customer-select');
@@ -306,7 +293,6 @@
         create: true,
         persist: false,
         onInitialize: function () {
-          // Gunakan this.input (elemen select asli) untuk mengambil atribut data
           const self = this;
           const originalSelect = self.input;
           const options = originalSelect.querySelectorAll('option');
@@ -316,7 +302,6 @@
             const phone = option.getAttribute('data-phone');
             const email = option.getAttribute('data-email');
 
-            // Pastikan data dimasukkan ke dalam internal storage Tom Select
             if (self.options[value]) {
               if (phone) self.options[value].phone = phone;
               if (email) self.options[value].email = email;
@@ -327,10 +312,8 @@
           const selected = this.options[value];
 
           if (selected && (selected.phone || selected.email)) {
-            // PELANGGAN LAMA
             phoneInput.value = selected.phone || '';
             emailInput.value = selected.email || '';
-            // Di dalam onChange TomSelect
             if (typeof displayError === 'function') {
               displayError(phoneInput, '');
               displayError(emailInput, '');
@@ -338,20 +321,17 @@
               console.error("Fungsi displayError belum ke-load! Pastikan script validator sudah dipasang.", displayError);
             }
 
-            // Kunci field agar data master tidak berantakan
             [phoneInput, emailInput].forEach(el => {
               el.readOnly = true;
               el.classList.add('bg-slate-100', 'cursor-not-allowed', 'text-slate-500');
 
-              // --- RESET ERROR DISPLAY DISINI ---
               if (typeof displayError === 'function') {
-                displayError(el, ''); // Hapus pesan error dan border merah
+                displayError(el, '');
               }
             });
 
             hiddenNameInput.value = selected.text;
           } else {
-            // PELANGGAN BARU
             [phoneInput, emailInput].forEach(el => {
               el.value = '';
               el.readOnly = false;
@@ -360,7 +340,6 @@
             hiddenNameInput.value = value;
           }
 
-          // Trigger validator untuk semua field terkait
           if (typeof validateInput === 'function') {
             validateInput(this.select);
             validateInput(phoneInput);
@@ -391,38 +370,27 @@
 <style scoped>
   .ts-wrapper.tomselected.w-full {
     padding: 0 !important;
-    /* Reset padding bawaan agar dikontrol oleh inner */
     border: none !important;
   }
 
   .ts-control {
     background-color: white !important;
-    /* bg-slate-50 */
-    border: 1px solid #f1f5f9 !important;
-    /* border-slate-100 */
+    border: 1px solid #f1f5f9 !important; /* border-slate-100 */
     border-radius: 0.5rem !important;
-    /* rounded-lg */
     padding: 10px 16px !important;
-    /* px-4 py-2.5 */
     font-size: 0.875rem !important;
-    /* text-sm */
     color: #0f172a !important;
-    /* text-slate-900 */
     box-shadow: none !important;
     height: 42px !important;
     transition: all 0.2s;
   }
-
-  /* Saat Fokus */
+  
   .ts-wrapper.focus .ts-control {
     background-color: #ffffff !important;
     border-color: #2563eb !important;
-    /* border-blue-600 */
     box-shadow: 0 0 0 4px #eff6ff !important;
-    /* focus:ring-blue-50 */
   }
-
-  /* Dropdown styling */
+  
   .ts-dropdown {
     border-radius: 0.75rem !important;
     border: 1px solid #f1f5f9 !important;
@@ -439,8 +407,6 @@
 
   .ts-dropdown .active {
     background-color: #eff6ff !important;
-    /* bg-blue-50 */
     color: #2563eb !important;
-    /* text-blue-600 */
   }
 </style>

@@ -93,19 +93,10 @@ exports.store = async payload => {
   let customer = null
   const { customer_id, customer_name, customer_email, customer_phone } = payload
 
-  /**
-   * 1. CEK BERDASARKAN ID (Pelanggan Lama)
-   * Jika customer_id adalah angka, kita cari langsung ke database.
-   */
   if (customer_id && !isNaN(customer_id)) {
     customer = await CustomerModel.findByPk(customer_id)
   }
 
-  /**
-   * 2. CEK BERDASARKAN EMAIL/PHONE (Fallback/Duplikasi)
-   * Jika pelanggan tidak ketemu lewat ID (atau input baru), 
-   * cek apakah email/phone sudah terdaftar sebelumnya agar tidak duplikat.
-   */
   if (!customer && (customer_email || customer_phone)) {
     customer = await CustomerModel.findOne({
       where: {
@@ -117,41 +108,30 @@ exports.store = async payload => {
     })
   }
 
-  /**
-   * 3. BUAT BARU
-   * Jika benar-benar tidak ada di database, baru kita create.
-   */
   if (!customer) {
     customer = await CustomerModel.create({
-      name: customer_name || customer_id, // Gunakan customer_id jika itu teks nama baru
+      name: customer_name || customer_id,
       email: customer_email,
       phone: customer_phone
     })
   }
 
-  // 4. SET PAYLOAD FINAL
   payload.customer_id = customer.id
   payload.tracking_code = TrackingHelper.generateTrackingCode()
   payload.status = 1 // Status: Baru
 
-  // Bersihkan payload dari field yang bukan milik tabel Service
   const cleanPayload = { ...payload }
   delete cleanPayload.customer_name
   delete cleanPayload.customer_email
   delete cleanPayload.customer_phone
 
-  // 5. SIMPAN DATA SERVIS
   const newService = await Model.create(cleanPayload)
 
-  /**
-   * 6. OTOMATIS TAMBAH KE HISTORY
-   * Setelah servis tercipta, kita buat record di tabel history.
-   */
   await HistoryModel.create({
     service_id: newService.id,
-    status: 1, // Sesuai dengan status awal
+    status: 1,
     note: payload.note || 'Unit masuk pertama kali (Pendaftaran)',
-    updated_by: 'System' // Atau ambil dari req.user.name jika ada session
+    updated_by: 'System'
   })
 
   return newService
