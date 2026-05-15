@@ -67,6 +67,8 @@ exports.store = async (req, res) => {
       device_name: formattedService.device_name,
       estimated_price: req.body.estimated_price || 0,
       note: req.body.note || '-'
+    }).then(() => {
+      console.log(`✅ Email notifikasi terkirim ke: ${formattedService.customer_email}`)
     }).catch(err => console.error('Gagal kirim email nota:', err.message))
 
     SessionHelper.setFlash(req, 'success', 'Sukses menambah data servis baru.')
@@ -138,8 +140,6 @@ exports.update = async (req, res) => {
       req.admin?.id || 0,
       cleanTotalPrice
     )
-    
-    SessionHelper.setFlash(req, 'success', 'Sukses menambah progress.')
 
     if (req.body.status === '3' || req.body.status === 3) {
       MailHelper.sendReadyNotification(serviceData.customer_email, {
@@ -149,10 +149,6 @@ exports.update = async (req, res) => {
         total_cost: req.body.total_price
       }).then(() => {
         console.log(`✅ Email notifikasi terkirim ke: ${serviceData.customer_email}`)
-        return Render.redirect(
-          res,
-          `/services/${req.params.id}`
-        )
       }).catch(err => {
         return Render.view(
           res,
@@ -167,6 +163,8 @@ exports.update = async (req, res) => {
         )
       })
     }
+    
+    SessionHelper.setFlash(req, 'success', 'Sukses menambah progress.')
     return Render.redirect(
       res,
       `/services/${req.params.id}`

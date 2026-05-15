@@ -4,7 +4,7 @@ exports.sendReadyNotification = async (customerEmail, serviceData) => {
   try {
     const mailOptions = {
       // from: `"TechService" <${process.env.EMAIL_USER}>`,
-      from: 'TechService <onboarding@resend.dev>',
+      from: 'TechService <techservice@nadiapd.com>',
       to: customerEmail,
       subject: `[SIAP AMBIL] Unit #${serviceData.tracking_code} Selesai Diperbaiki`,
       html: `
@@ -57,7 +57,7 @@ exports.sendNewServiceNotification = async (customerEmail, serviceData) => {
   try {
     const mailOptions = {
       // from: `"TechService" <${process.env.EMAIL_USER}>`,
-      from: 'TechService <onboarding@resend.dev>',
+      from: 'TechService <techservice@nadiapd.com>',
       to: customerEmail,
       subject: `[TANDA TERIMA] Registrasi Servis #${serviceData.tracking_code}`,
       html: `
@@ -117,7 +117,7 @@ exports.sendAdminWelcomeEmail = async (targetEmail, data) => {
   try {
     const mailOptions = {
       // from: `"TechService Admin" <${process.env.EMAIL_USER}>`,
-      from: 'TechService Admin <onboarding@resend.dev>',
+      from: 'TechService Admin <techservice@nadiapd.com>',
       to: targetEmail,
       subject: '[AKSES ADMIN] Akun Baru TechService',
       html: `
