@@ -160,7 +160,7 @@ exports.update = async (req, res) => {
           {
             title: 'Service Detail',
             layout: 'main',
-            service: result,
+            service: serviceData,
             errors: SessionHelper.getFlash(req, 'errors'),
             old: SessionHelper.getFlash(req, 'old')
           }

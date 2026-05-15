@@ -1,51 +1,50 @@
-<div class="max-w-4xl mx-auto">
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div class="max-w-4xl mx-auto px-4 md:px-0">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
     <div>
       <a href="/services/{{service.id}}"
-        class="text-slate-400 hover:text-blue-600 text-sm font-bold flex items-center gap-2 mb-2 transition-colors">
-        ← Kembali ke Detail
+        class="text-slate-400 hover:text-blue-600 text-xs font-bold inline-flex items-center gap-2 mb-4 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Kembali ke Detail
       </a>
-      <h2 class="text-2xl font-black text-slate-900 tracking-tight">Riwayat Progress</h2>
-      <p class="text-slate-500 text-sm italic">Tracking ID: #{{service.tracking_code}}</p>
+      <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Riwayat Progress</h2>
+      <p class="text-slate-500 text-sm italic mt-1">Tracking ID: <span class="text-blue-600 font-mono font-bold">#{{service.tracking_code}}</span></p>
     </div>
-    <div class="flex flex-col gap-1">
-      <p class="text-[10px] text-right font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">
-        Status Saat Ini</p>
-      <span
-        class="px-4 py-1.5 text-center rounded-full text-[11px] font-black uppercase tracking-widest {{service.status_color}} shadow-sm border border-white/20">
+    <div class="flex flex-col items-start sm:items-end gap-1 bg-white p-4 rounded-xl border border-slate-100 shadow-sm md:bg-transparent md:border-0 md:p-0 md:shadow-none">
+      <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] leading-none mb-2">Status Saat Ini</p>
+      <span class="px-5 py-2 rounded-full text-[11px] font-black uppercase tracking-widest {{service.status_color}} shadow-sm border border-white/20">
         {{service.status_label}}
       </span>
     </div>
   </div>
   <div class="relative">
-    <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-slate-100 -translate-x-1/2 hidden md:block">
-    </div>
-    <div class="space-y-12">
+    <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-slate-200/80 -translate-x-1/2"></div>
+    <div class="space-y-10 md:space-y-12">
       {{#each histories}}
-      <div class="relative flex flex-col md:flex-row items-center">
-        <div class="absolute left-4 md:left-1/2 w-4 h-4 rounded-full border-4 border-white shadow-sm z-10 -translate-x-1/2 
-                    {{#if @first}} bg-blue-600 ring-4 ring-blue-50 {{else}} bg-slate-300 {{/if}}">
+      <div class="relative flex items-start md:items-center">
+        <div class="absolute left-4 md:left-1/2 w-5 h-5 rounded-full border-4 border-white shadow-md z-10 -translate-x-1/2 
+                    {{#if @first}} bg-blue-600 ring-4 ring-blue-50 {{else}} bg-slate-300 {{/if}} transition-all duration-500 group-hover:scale-125">
         </div>
-        <div
-          class="w-full md:w-[45%] {{#if (isEven @index)}} md:ml-auto md:pl-8 {{else}} md:mr-auto md:pr-8 md:text-right {{/if}} ml-10 md:ml-0">
-          <div
-            class="bg-white p-6 rounded-3xl border border-slate-100 drop-shadow-xl shadow-slate-200/40 hover:border-blue-200 transition-all group">
-            <div class="flex items-center gap-3 mb-3 {{#unless (isEven @index)}} md:justify-end {{/unless}}">
+        <div class="w-full md:w-[45%] 
+                    {{#if (isEven @index)}} md:ml-auto md:pl-10 {{else}} md:mr-auto md:pr-10 md:text-right {{/if}} 
+                    ml-12 md:ml-0">
+          <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-xl shadow-slate-200/40 hover:border-blue-200 hover:shadow-blue-100/50 transition-all group relative">
+            <div class="flex flex-wrap items-center gap-3 mb-4 {{#unless (isEven @index)}} md:justify-end {{/unless}}">
               <span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-tighter {{this.status_color}}">
                 {{this.status_label}}
               </span>
-              <span class="text-[10px] text-slate-400 font-mono">{{formatDate this.created_at}}</span>
+              <span class="text-[10px] text-slate-400 font-mono font-bold">{{formatDate this.created_at}}</span>
             </div>
-            <h4 class="text-slate-900 font-bold text-sm mb-2 group-hover:text-blue-600 transition-colors">
+            <h4 class="text-slate-900 font-bold text-sm leading-relaxed mb-4 group-hover:text-blue-600 transition-colors">
               {{ this.note }}
             </h4>
-
-            <div
-              class="flex items-center gap-2 {{#unless (isEven @index)}} md:justify-end {{/unless}} mt-4 pt-4 border-t border-slate-50">
-              <div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px]">
-                👤</div>
-              <span class="text-[10px] font-bold text-slate-500 uppercase">Oleh:
-                {{this.updated_by}}</span>
+            <div class="flex items-center gap-2 {{#unless (isEven @index)}} md:justify-end {{/unless}} pt-4 border-t border-slate-50">
+              <div class="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-xs grayscale">
+                👤
+              </div>
+              <div class="flex flex-col items-start {{#unless (isEven @index)}} md:items-end {{/unless}}">
+                <span class="text-[9px] text-slate-400 uppercase font-black tracking-widest">Update Oleh</span>
+                <span class="text-[10px] font-black text-slate-700">{{this.updated_by}}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -54,8 +53,9 @@
     </div>
   </div>
   {{#unless histories}}
-  <div class="bg-white rounded-[2rem] p-20 text-center border border-slate-100 shadow-sm mt-10">
-    <p class="text-slate-400 font-medium">Belum ada riwayat aktivitas untuk unit ini.</p>
+  <div class="bg-white rounded-xl p-16 text-center border border-slate-100 shadow-sm mt-10">
+    <div class="w-20 h-20 bg-slate-50 rounded-xl flex items-center justify-center mx-auto mb-6 text-3xl opacity-50">📜</div>
+    <p class="text-slate-400 font-bold text-sm">Belum ada riwayat aktivitas untuk unit ini.</p>
   </div>
   {{/unless}}
 </div>

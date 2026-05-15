@@ -23,7 +23,7 @@ exports.update = body => {
   const rules = {
     name: 'required|string|max:255',
     email: 'required|email|max:255',
-    phone: 'required|numeric|max:1'
+    phone: 'required|numeric'
   }
   const messages = {
     required: ':attribute is required',

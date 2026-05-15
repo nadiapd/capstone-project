@@ -10,13 +10,13 @@
     </button>
   </div>
   <div class="bg-white p-6 rounded-xl border border-slate-100 drop-shadow-md mb-8">
-    <form action="/services" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="md:col-span-1">
+    <form action="/services" method="GET" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="flex flex-col">
         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Cari</label>
         <input type="text" name="q" value="{{query.q}}" placeholder="Kode/Nama/Brand..."
           class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
       </div>
-      <div>
+      <div class="flex flex-col">
         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">
           Kategori
         </label>
@@ -34,7 +34,7 @@
           </option>
         </select>
       </div>
-      <div>
+      <div class="flex flex-col">
         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Status</label>
         <select name="status"
           class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:bg-white outline-none">
@@ -45,7 +45,7 @@
           <option value="4" {{#if (eq query.status '4' )}}selected{{/if}}>Selesai</option>
         </select>
       </div>
-      <div class="col-span-3 flex justify-end gap-2">
+      <div class="lg:col-span-3 flex justify-end gap-2">
         <button type="submit" title="Terapkan Filter"
           class="flex-1 bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-slate-800 transition-all">
           Terapkan
@@ -58,7 +58,7 @@
     </form>
   </div>
   <div class="bg-white rounded-xl drop-shadow-md shadow-slate-200/50 border border-slate-100 overflow-hidden">
-    <div class="overflow-x-auto">
+    <div class="hidden lg:block overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead>
           <tr class="bg-slate-50/50 border-b border-slate-100">
@@ -151,13 +151,46 @@
         </tbody>
       </table>
     </div>
+    <div class="lg:hidden divide-y divide-slate-100">
+      {{#each services}}
+      <div class="p-6 flex flex-col gap-4">
+        <div class="flex justify-between items-start">
+          <span class="font-mono text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
+            #{{this.tracking_code}}
+          </span>
+          <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase {{this.status_color}}">
+            {{this.status_label}}
+          </span>
+        </div>
+        
+        <div class="flex flex-col">
+          <h4 class="font-black text-slate-900 text-base">{{this.customer_name}}</h4>
+          <div class="flex items-center gap-2 mt-1">
+              <span class="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-bold uppercase">{{this.device_category}}</span>
+              <span class="text-xs text-slate-400 font-medium italic">{{this.device_name}}</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+          <div class="text-[10px] text-slate-400 font-medium">
+            <p>Masuk: {{formatDate this.created_at}}</p>
+          </div>
+          <a href="/services/{{this.id}}" class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-blue-100">
+              Detail
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+      {{/each}}
+    </div>
     {{#unless services}}
-    <div class="p-20 text-center">
-      <p class="text-slate-400 font-medium">Belum ada data servis masuk.</p>
+    <div class="flex flex-col items-center">
+      <span class="text-4xl mb-4">📂</span>
+      <p class="text-slate-400 italic text-sm">Belum ada data servis masuk.</p>
     </div>
     {{/unless}}
   </div>
-  <div id="createServiceModal" class="fixed inset-0 z-[100] hidden">
+  <div id="createServiceModal" class="fixed inset-0 z-[10002] hidden">
     <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
     <div class="flex items-center justify-center min-h-screen p-4">
       <div
@@ -207,16 +240,16 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <h4
-                class="col-span-2 text-[10px] font-black text-blue-600 uppercase tracking-widest border-b border-slate-100 pb-2">
+                class="md:col-span-2 text-[10px] font-black text-blue-600 uppercase tracking-widest border-b border-slate-100 pb-2">
                 Informasi Perangkat</h4>
-              <div>
+              <div class="flex flex-col">
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Merk &
                   Tipe</label>
                 <input type="text" name="device_name" rules="required" fieldname="Nama Perangkat"
                   placeholder="Contoh: Asus ROG Strix"
                   class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
               </div>
-              <div>
+              <div class="flex flex-col">
                 <label
                   class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Kategori</label>
                 <select name="device_category"
