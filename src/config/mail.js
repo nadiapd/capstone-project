@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 
   // Gmail
   host: 'smtp.gmail.com',
-  port: 465, //587 //2525 gak bisa dilocal
+  port: 587, //587 //2525 gak bisa dilocal
   secure: true,
   requireTLS: true,
   auth: {
