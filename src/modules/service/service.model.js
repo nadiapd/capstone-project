@@ -31,9 +31,6 @@ const Service = sequelize.define('services', {
   device_name: {
     type: Sequelize.STRING(255)
   },
-  device_brand: {
-    type: Sequelize.STRING(255)
-  },
   note: {
     type: Sequelize.TEXT
   },
