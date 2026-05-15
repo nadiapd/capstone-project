@@ -55,7 +55,7 @@ exports.store = async (req, res) => {
       return Render.redirect(res, '/services')
     }
 
-    const newService = await Service.store(req.body)
+    const newService = await Service.store(req.body, req.admin)
 
     const serviceDetail = await Service.getById(newService.id)
     const formattedService = Helper.getServiceDetail(serviceDetail)

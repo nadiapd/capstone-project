@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
   // Gmail
   host: 'smtp.gmail.com',
   // port: 465,
-  port: 587,
+  port: 2525,
   secure: false,
   // secure: true,
   family: 4,

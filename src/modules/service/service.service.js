@@ -89,7 +89,7 @@ exports.getById = async id => {
   })
 }
 
-exports.store = async payload => {
+exports.store = async (payload, admin) => {
   let customer = null
   const { customer_id, customer_name, customer_email, customer_phone } = payload
 
@@ -131,7 +131,7 @@ exports.store = async payload => {
     service_id: newService.id,
     status: 1,
     note: payload.note || 'Unit masuk pertama kali (Pendaftaran)',
-    updated_by: 0
+    updated_by: admin.id
   })
 
   return newService
