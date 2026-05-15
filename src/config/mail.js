@@ -1,5 +1,5 @@
-const dns = require('dns')
-dns.setDefaultResultOrder('ipv4first')
+// const dns = require('dns')
+// dns.setDefaultResultOrder('ipv4first')
 const nodemailer = require('nodemailer')
 
 const transporter = nodemailer.createTransport({
@@ -17,21 +17,34 @@ const transporter = nodemailer.createTransport({
   // }
 
   // Gmail
-  host: 'smtp.gmail.com',
-  port: 587, //587 //2525 gak bisa dilocal
+  // host: 'smtp.gmail.com',
+  // port: 587, //587 //2525 gak bisa dilocal
+  // secure: false,
+  // requireTLS: true,
+  // auth: {
+  //   user: process.env.EMAIL_USER,
+  //   pass: process.env.EMAIL_PASS
+  // },
+  // connectionTimeout: 60000,
+  // greetingTimeout: 30000,
+  // socketTimeout: 60000,
+
+  // tls: {
+  //   rejectUnauthorized: false,
+  //   family: 4
+  // }
+  host: '74.125.24.108',
+  port: 587,
   secure: false,
   requireTLS: true,
+
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
-  connectionTimeout: 60000,
-  greetingTimeout: 30000,
-  socketTimeout: 60000,
 
   tls: {
-    rejectUnauthorized: false,
-    family: 4
+    servername: 'smtp.gmail.com'
   }
 })
 
