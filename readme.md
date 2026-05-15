@@ -57,8 +57,7 @@ Salin file `.env.example` menjadi `.env` dan sesuaikan kredensial database masin
 Buat database sesuai nama di `.env`, lalu jalankan migrasi database dan seed data admin:
 
 ```bash
-npx sequelize-cli db:migrate
-npx sequelize-cli db:seed:all
+node seed-admin.js
 ```
 
 ---

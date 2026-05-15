@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const db = require('./src/config/db')
-const Admin = require('./src/modules/auth/auth.model')
+const Admin = require('./src/modules/admin/admin.model')
 const AdminService = require('./src/modules/admin/admin.service')
 
 const seedAdmin = async () => {
