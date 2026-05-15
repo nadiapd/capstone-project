@@ -1,11 +1,7 @@
- 
-
-// 1. PINDAHKAN KE LUAR AGAR MENJADI GLOBAL
 const displayError = (input, message) => {
   const isTomSelect = input.classList.contains('tomselected')
   const tomWrapper = input.nextElementSibling
   
-  // Ambil elemen visual (kotak yang dilihat user)
   const visualTarget = (isTomSelect && tomWrapper?.classList.contains('ts-wrapper')) 
     ? tomWrapper.querySelector('.ts-control') 
     : input
@@ -31,7 +27,6 @@ const displayError = (input, message) => {
 const validateInput = (input) => {
   if (!input) return true 
 
-  // Gunakan optional chaining (?.) untuk keamanan tambahan
   const rules = input.getAttribute('rules')?.split('|') || []
   const fieldName = input.getAttribute('fieldname') || 'Field ini'
   const value = input.value || ''
@@ -63,7 +58,6 @@ const validateInput = (input) => {
   return !errorMessage
 }
 
-// Fungsi Utama
 const initLiveValidation = (formId) => {
   const form = document.querySelector(formId)
   if (!form) return
@@ -86,7 +80,6 @@ const initLiveValidation = (formId) => {
   })
 }
 
-// Daftarkan ke window agar aman dipanggil dari file HBS manapun
 window.displayError = displayError
 window.validateInput = validateInput
 window.initLiveValidation = initLiveValidation

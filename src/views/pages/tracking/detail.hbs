@@ -1,101 +1,149 @@
-<div class="max-w-2xl mx-auto animate-fade-in">
-  <div class="bg-white rounded-xl shadow-2xl shadow-slate-200/60 border border-slate-50 overflow-hidden">
-    <div class="p-8 {{service.status_color}} text-center relative border-b border-black/5">
-  <div class="absolute inset-0 bg-white/20"></div>
-  <div class="relative z-10">
-    <div class="flex items-center justify-center gap-2 mb-2">
-      <p class="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">
-        Servis #<span id="trackingCode">{{service.tracking_code}}</span>
-      </p>
-      <button onclick="copyTrackingID()" 
-        class="p-1 hover:bg-black/5 rounded transition-colors active:scale-90" 
-        title="Salin ID">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+<div class="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-6">
+  <div class="w-full max-w-2xl mt-6">
+    <div class="flex flex-col items-center mb-8 gap-2">
+      <div
+        class="w-16 h-16 text-blue-600 bg-white rounded-xl flex items-center justify-center shadow-lg shadow-blue-900/50">
+        <svg fill="currentColor" class="w-12 h-12" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 328.135 328.135" xml:space="preserve">
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="SVGRepo_iconCarrier">
+            <g>
+              <g>
+                <path
+                  d="M52.735,94.94l12.667,12.667L49.279,123.73c16.404,10.588,38.508,8.714,52.874-5.647L42.26,58.194 c-14.362,14.362-16.236,36.47-5.647,52.874L52.735,94.94z">
+                </path>
+                <polygon
+                  points="144.419,45.911 147.327,35.681 124.922,13.276 114.693,16.184 68.295,62.582 98.022,92.309 ">
+                </polygon>
+                <path
+                  d="M214.195,132.966l79.13-85.304c0.169-0.169,0.353-0.297,0.522-0.466l12.324-1.72l21.965-32.568L315.34,0.113 l-33.009,21.939l-1.28,12.349c-0.164,0.169-0.297,0.353-0.466,0.522l-85.304,79.135 C202.449,121.329,206.858,125.742,214.195,132.966z">
+                </path>
+                <path
+                  d="M246.655,200.223l-37.35,37.35l13.67,51.021l51.021,13.67l37.35-37.35l-13.67-51.021L246.655,200.223z M276.423,267.336 c-8.888,8.888-23.301,8.888-32.189,0s-8.888-23.301,0-32.184c8.888-8.888,23.301-8.888,32.189,0 C285.311,244.035,285.311,258.447,276.423,267.336z">
+                </path>
+                <path
+                  d="M204.39,145.761c-8.924-8.781-13.353-13.205-22.139-22.129c-6.323-6.421-16.65-6.589-23.127-0.317 c-0.333,0.323-0.671,0.65-1.004,0.973c6.246,6.446,6.205,16.727-0.164,23.096c-6.436,6.436-16.865,6.436-23.301,0 c-0.061-0.061-0.102-0.138-0.164-0.2C91.187,189.158,47.877,231.127,4.566,273.101c-6.472,6.272-6.021,17.249,1.075,24.453 c9.856,10.004,14.817,14.971,24.827,24.827c7.204,7.096,18.181,7.547,24.453,1.075c2.61-2.695,5.222-5.39,7.833-8.085 l-50.104-50.104c4.823-4.675,9.646-9.349,14.469-14.024l49.659,49.659c34.693-35.799,69.381-71.598,104.074-107.397 c-0.128-0.118-0.271-0.2-0.394-0.323c-6.436-6.436-6.436-16.865,0-23.301c6.431-6.431,16.86-6.431,23.291-0.005 c0.317-0.328,0.635-0.655,0.957-0.988C210.979,162.417,210.815,152.085,204.39,145.761z">
+                </path>
+                <path
+                  d="M69.135,308.787c-2.126,2.195-4.253,4.389-6.38,6.584l0,0C64.88,313.175,67.01,310.984,69.135,308.787z">
+                </path>
+              </g>
+            </g>
+          </g>
         </svg>
-      </button>
+      </div>
+      <h1 class="text-xl font-bold tracking-tight text-white">
+        Tech<span class="text-blue-500">Service</span>
+      </h1>
     </div>
-    <h3 class="text-3xl font-extrabold uppercase tracking-tight">
-      {{service.status_label}}
-    </h3>
   </div>
-</div>
-    <div class="p-6 md:p-10">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-        <div class="flex flex-col gap-1 p-4 bg-slate-50 rounded-xl border border-slate-100">
-          <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Pemilik</span>
-          <p class="text-slate-900 font-extrabold text-base">{{service.customer_name}}</p>
-        </div>
-        <div class="flex flex-col gap-1 p-4 bg-slate-50 rounded-xl border border-slate-100 sm:text-right">
-          <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Unit / Perangkat</span>
-          <p class="text-slate-900 font-extrabold text-base">{{service.device_name}}</p>
+
+  <div class="max-w-2xl mx-auto animate-fade-in">
+    <div class="bg-white rounded-xl shadow-2xl shadow-slate-200/60 border border-slate-50 overflow-hidden">
+      <div class="p-8 {{service.status_color}} text-center relative border-b border-black/5">
+        <div class="absolute inset-0 bg-white/20"></div>
+        <div class="relative z-10">
+          <div class="flex items-center justify-center gap-2 mb-2">
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">
+              Servis #<span id="trackingCode">{{service.tracking_code}}</span>
+            </p>
+            <button onclick="copyTrackingID()" class="p-1 hover:bg-black/5 rounded transition-colors active:scale-90"
+              title="Salin ID">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-40" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </button>
+          </div>
+          <h3 class="text-3xl font-extrabold uppercase tracking-tight">
+            {{service.status_label}}
+          </h3>
         </div>
       </div>
-      {{#if service.total_price}}
-      <div class="mb-10 p-6 bg-slate-900 rounded-2xl shadow-xl shadow-blue-900/10 text-white relative overflow-hidden animate-fade-in">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-600/20 rounded-full -mr-16 -mt-16 blur-2xl"></div>
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
-          <div>
-            <p class="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-1">Total Biaya Akhir</p>
-            <p class="text-3xl font-black tracking-tight">{{formatCurrency service.total_price}}</p>
+      <div class="p-6 md:p-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+          <div class="flex flex-col gap-1 p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Pemilik</span>
+            <p class="text-slate-900 font-extrabold text-base">{{service.customer_name}}</p>
           </div>
-          {{#if (eq service.status 3)}}
-          <div class="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-             <span class="text-emerald-400 text-sm">✓</span>
-             <p class="text-[10px] text-emerald-100 font-black uppercase tracking-wider">Siap Diambil</p>
+          <div class="flex flex-col gap-1 p-4 bg-slate-50 rounded-xl border border-slate-100 sm:text-right">
+            <span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Unit / Perangkat</span>
+            <p class="text-slate-900 font-extrabold text-base">{{service.device_name}}</p>
           </div>
-          {{/if}}
         </div>
-      </div>
-      {{/if}}
-      <div class="space-y-8 relative">
-        <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 mb-8 ml-1">
-          <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span> Riwayat Pengerjaan
-        </h4>
-        <div class="relative pl-8 space-y-10 before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[1.5px] before:bg-slate-100">
-          {{#each history}}
-          <div class="relative group">
-            <div class="absolute -left-8 top-1 w-6 h-6 bg-white border-[3px] border-blue-600 rounded-full z-10"></div>
-            <div class="flex flex-col gap-2">
-              <div class="flex flex-wrap items-center gap-2">
-                 <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase shadow-sm {{this.status_color}}">
-                   {{this.status_label}}
-                 </span>
-                 <span class="text-[10px] font-bold text-slate-400">
-                   {{formatDate this.created_at}}
-                 </span>
-              </div>
-              <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 shadow-sm transition-colors group-hover:bg-blue-50/30">
-                <p class="text-[13px] text-slate-700 font-medium leading-relaxed">
-                  {{this.note}}
-                </p>
+        {{#if service.total_price}}
+        <div
+          class="mb-10 p-6 bg-slate-900 rounded-2xl shadow-xl shadow-blue-900/10 text-white relative overflow-hidden animate-fade-in">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-blue-600/20 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
+            <div>
+              <p class="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-1">Total Biaya Akhir</p>
+              <p class="text-3xl font-black tracking-tight">{{formatCurrency service.total_price}}</p>
+            </div>
+            {{#if (eq service.status 3)}}
+            <div class="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+              <span class="text-emerald-400 text-sm">✓</span>
+              <p class="text-[10px] text-emerald-100 font-black uppercase tracking-wider">Siap Diambil</p>
+            </div>
+            {{/if}}
+          </div>
+        </div>
+        {{/if}}
+        <div class="space-y-8 relative">
+          <h4
+            class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2 mb-8 ml-1">
+            <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span> Riwayat Pengerjaan
+          </h4>
+          <div
+            class="relative pl-8 space-y-10 before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[1.5px] before:bg-slate-100">
+            {{#each history}}
+            <div class="relative group">
+              <div class="absolute -left-8 top-1 w-6 h-6 bg-white border-[3px] border-blue-600 rounded-full z-10"></div>
+              <div class="flex flex-col gap-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase shadow-sm {{this.status_color}}">
+                    {{this.status_label}}
+                  </span>
+                  <span class="text-[10px] font-bold text-slate-400">
+                    {{formatDate this.created_at}}
+                  </span>
+                </div>
+                <div
+                  class="bg-slate-50 rounded-xl p-4 border border-slate-100 shadow-sm transition-colors group-hover:bg-blue-50/30">
+                  <p class="text-[13px] text-slate-700 font-medium leading-relaxed">
+                    {{this.note}}
+                  </p>
+                </div>
               </div>
             </div>
+            {{/each}}
           </div>
-          {{/each}}
         </div>
       </div>
-    </div>
-    <div class="p-6 bg-slate-50 border-t border-slate-100 text-center">
-      <p class="text-[9px] text-slate-400 font-medium mb-4 italic px-4 uppercase tracking-tighter">
-        Halaman ini bersifat privat. Silakan hubungi admin jika butuh bantuan lebih lanjut.
-      </p>
-      <a href="/track" class="inline-flex items-center gap-2 px-8 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-slate-600 uppercase tracking-widest hover:bg-slate-100 hover:text-blue-600 transition-all shadow-sm">
-        ← Keluar & Lacak Baru
-      </a>
+      <div class="p-6 bg-slate-50 border-t border-slate-100 text-center">
+        <p class="text-[9px] text-slate-400 font-medium mb-4 italic px-4 uppercase tracking-tighter">
+          Halaman ini bersifat privat. Silakan hubungi admin jika butuh bantuan lebih lanjut.
+        </p>
+        <a href="/track"
+          class="inline-flex items-center gap-2 px-8 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-slate-600 uppercase tracking-widest hover:bg-slate-100 hover:text-blue-600 transition-all shadow-sm">
+          ← Keluar & Lacak Baru
+        </a>
+      </div>
     </div>
   </div>
 </div>
 <script>
   function copyTrackingID() {
-  const trackingText = document.getElementById('trackingCode').innerText;
-  navigator.clipboard.writeText(trackingText).then(() => {
-    const btn = event.currentTarget;
-    const originalHTML = btn.innerHTML;
-    btn.innerHTML = '<span class="text-[10px] opacity-60">✓</span>';
-    setTimeout(() => {
-      btn.innerHTML = originalHTML;
-    }, 2000);
-  })
-}
+    const trackingText = document.getElementById('trackingCode').innerText;
+    navigator.clipboard.writeText(trackingText).then(() => {
+      const btn = event.currentTarget;
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<span class="text-[10px] opacity-60">✓</span>';
+      setTimeout(() => {
+        btn.innerHTML = originalHTML;
+      }, 2000);
+    })
+  }
 </script>
