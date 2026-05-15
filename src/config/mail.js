@@ -16,18 +16,11 @@ const transporter = nodemailer.createTransport({
 
   // Gmail
   host: 'smtp.gmail.com',
-  // port: 465,
-  port: 2525,
-  secure: false,
-  // secure: true,
-  family: 4,
+  port: 465, //587 //2525 gak bisa dilocal
+  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    // Membantu melewati kendala handshaking di lingkungan container
-    rejectUnauthorized: false 
   }
 })
 
