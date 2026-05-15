@@ -24,8 +24,16 @@ const ServiceHistory = sequelize.define('service_histories', {
   note: {
     type: Sequelize.TEXT
   },
+  // updated_by: {
+  //   type: Sequelize.STRING(255)
+  // },
   updated_by: {
-    type: Sequelize.STRING(255)
+    type: Sequelize.BIGINT,
+    allowNull: false,
+    references: {
+      model: 'admins',
+      key: 'id'
+    }
   }
 })
 

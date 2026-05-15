@@ -135,7 +135,7 @@ exports.update = async (req, res) => {
       req.params.id,
       req.body.status,
       req.body.note,
-      req.admin?.name || 'System',
+      req.admin?.id || 0,
       cleanTotalPrice
     )
     

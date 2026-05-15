@@ -131,7 +131,7 @@ exports.store = async payload => {
     service_id: newService.id,
     status: 1,
     note: payload.note || 'Unit masuk pertama kali (Pendaftaran)',
-    updated_by: 'System'
+    updated_by: 0
   })
 
   return newService
@@ -163,7 +163,7 @@ exports.updateStatus = async (
     service_id: id,
     status,
     note,
-    updated_by: updatedBy || 'Admin'
+    updated_by: updatedBy || 0
   })
 
   return service
