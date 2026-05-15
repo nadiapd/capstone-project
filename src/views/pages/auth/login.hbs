@@ -59,7 +59,7 @@
       {{/if}}
       <form action="/auth/login" method="POST" id="login-form">
         <div class="mb-5">
-          <label class="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">E-mail Admin</label>
+          <label class="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">E-mail Admin<span class="text-red-500">*</span></label>
           <input
             type="email"
             name="email"
@@ -71,7 +71,7 @@
         </div>
 
         <div class="mb-8">
-          <label class="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Password</label>
+          <label class="block mb-2 text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Password<span class="text-red-500">*</span></label>
           <input
             type="password"
             name="password"

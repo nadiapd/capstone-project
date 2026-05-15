@@ -37,4 +37,10 @@ router.use(
   require('../modules/admin/admin.route')
 )
 
+router.use(
+  '/profile',
+  authMiddleware,
+  require('../modules/profile/profile.route')
+)
+
 module.exports = router

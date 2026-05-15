@@ -52,6 +52,14 @@ const validateInput = (input) => {
         break
       }
     }
+    if (rule.startsWith('same:')) {
+      const targetName = rule.split(':')[1]
+      const targetInput = document.querySelector(`input[name="${targetName}"]`)
+      if (targetInput && value !== targetInput.value) {
+        errorMessage = `${fieldName} tidak cocok`
+        break
+      }
+    }
   }
 
   displayError(input, errorMessage)
