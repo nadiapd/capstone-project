@@ -71,6 +71,10 @@ app.engine(
       or(a, b) {
         return String(a || '') || String(b || '')
       },
+
+      gte(a, b) {
+        return a >= b
+      },
       
       isEven(idx) {
         return idx % 2 === 0

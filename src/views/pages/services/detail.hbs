@@ -8,8 +8,9 @@
       </a>
     </div>
     <div class="flex gap-2">
-      <button onclick="printInvoice()"
-        class="flex items-center gap-2 px-4 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm">
+      <button onclick="printInvoice()" {{#if (or (eq service.status 4) (eq service.status 5))}} disabled {{/if}}
+        class="flex items-center gap-2 px-4 py-1.5 bg-white border border-slate-200 text-slate-600 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm
+        disabled:bg-gray-50 disabled:text-gray-200 disabled:cursor-not-allowed disabled:shadow-none">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v3m4 8v1m0 4h.01" />
@@ -233,9 +234,16 @@
             </tr>
             <tr style="border-top: 1px solid #e2e8f0;">
               <td style="color: #64748b; padding-top: 8px;">Estimasi Biaya</td>
-              <td style="text-align: right; font-weight: bold; color: #2563eb; padding-top: 8px;">{{formatCurrency
+              <td style="text-align: right; font-weight: bold; color: #2563eb; padding-top: 8px; {{#if (gte service.status 3)}} text-decoration: line-through; color: #94a3b8; font-size: 12px; {{/if}}">{{formatCurrency
                 service.estimated_price}}</td>
             </tr>
+            {{#if (gte service.status 3)}}
+            <tr style="solid #e2e8f0;">
+              <td style="color: #64748b; padding-top: 8px;">Total Biaya</td>
+              <td style="text-align: right; font-weight: bold; color: #2563eb; padding-top: 8px;">{{formatCurrency
+                service.total_price}}</td>
+            </tr>
+            {{/if}}
           </table>
         </div>
         <p
