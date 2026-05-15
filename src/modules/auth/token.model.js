@@ -5,12 +5,12 @@ const sequelize = config.sequelize
 
 const Token = sequelize.define('tokens', {
   id: {
-    type: Sequelize.BIGINT,
+    type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
   admin_id: {
-    type: Sequelize.BIGINT,
+    type: Sequelize.INTEGER,
     allowNull: false,
     references: {
       model: 'admins',

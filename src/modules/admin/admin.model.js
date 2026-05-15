@@ -5,7 +5,7 @@ const sequelize = config.sequelize
 
 const Admin = sequelize.define('admins', {
   id: {
-    type: Sequelize.BIGINT,
+    type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },

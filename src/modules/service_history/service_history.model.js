@@ -5,12 +5,12 @@ const sequelize = config.sequelize
 
 const ServiceHistory = sequelize.define('service_histories', {
   id: {
-    type: Sequelize.BIGINT,
+    type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
   service_id: {
-    type: Sequelize.BIGINT,
+    type: Sequelize.INTEGER,
     allowNull: false,
     references: {
       model: 'services',
@@ -25,7 +25,7 @@ const ServiceHistory = sequelize.define('service_histories', {
     type: Sequelize.TEXT
   },
   updated_by: {
-    type: Sequelize.BIGINT,
+    type: Sequelize.INTEGER,
     allowNull: false,
     references: {
       model: 'admins',

@@ -5,7 +5,7 @@ const sequelize = config.sequelize
 
 const Customer = sequelize.define('customers', {
   id: {
-    type: Sequelize.BIGINT,
+    type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
