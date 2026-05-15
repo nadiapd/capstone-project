@@ -3,7 +3,8 @@ const transporter = require('../config/mail')
 exports.sendReadyNotification = async (customerEmail, serviceData) => {
   try {
     const mailOptions = {
-      from: `"TechService" <${process.env.EMAIL_USER}>`,
+      // from: `"TechService" <${process.env.EMAIL_USER}>`,
+      from: 'TechService <onboarding@resend.dev>',
       to: customerEmail,
       subject: `[SIAP AMBIL] Unit #${serviceData.tracking_code} Selesai Diperbaiki`,
       html: `
@@ -42,7 +43,11 @@ exports.sendReadyNotification = async (customerEmail, serviceData) => {
       `
     }
 
-    return await transporter.sendMail(mailOptions)
+    // use nodemailer smtp
+    // return await transporter.sendMail(mailOptions)
+    
+    // use resend
+    return await transporter.emails.send(mailOptions)
   } catch (error) {
     throw new Error('Gagal mengirim email: ' + error.message)
   }
@@ -51,7 +56,8 @@ exports.sendReadyNotification = async (customerEmail, serviceData) => {
 exports.sendNewServiceNotification = async (customerEmail, serviceData) => {
   try {
     const mailOptions = {
-      from: `"TechService" <${process.env.EMAIL_USER}>`,
+      // from: `"TechService" <${process.env.EMAIL_USER}>`,
+      from: 'TechService <onboarding@resend.dev>',
       to: customerEmail,
       subject: `[TANDA TERIMA] Registrasi Servis #${serviceData.tracking_code}`,
       html: `
@@ -97,18 +103,24 @@ exports.sendNewServiceNotification = async (customerEmail, serviceData) => {
       `
     }
 
-    return await transporter.sendMail(mailOptions)
+    // use nodemailer smtp
+    // return await transporter.sendMail(mailOptions)
+    
+    // use resend
+    return await transporter.emails.send(mailOptions)
   } catch (error) {
     throw new Error('Gagal mengirim email tanda terima: ' + error.message)
   }
 }
 
 exports.sendAdminWelcomeEmail = async (targetEmail, data) => {
-  const mailOptions = {
-    from: `"TechService Admin" <${process.env.EMAIL_USER}>`,
-    to: targetEmail,
-    subject: '[AKSES ADMIN] Akun Baru TechService',
-    html: `
+  try {
+    const mailOptions = {
+      // from: `"TechService Admin" <${process.env.EMAIL_USER}>`,
+      from: 'TechService Admin <onboarding@resend.dev>',
+      to: targetEmail,
+      subject: '[AKSES ADMIN] Akun Baru TechService',
+      html: `
       <div style="font-family: sans-serif; max-width: 500px; margin: auto; border: 1px solid #e2e8f0; border-radius: 20px; overflow: hidden;">
         <div style="background-color: #2563eb; padding: 25px; text-align: center; color: white;">
           <h2 style="margin: 0;">Selamat Datang!</h2>
@@ -132,6 +144,14 @@ exports.sendAdminWelcomeEmail = async (targetEmail, data) => {
         </div>
       </div>
     `
+    }
+  
+    // use nodemailer smtp
+    // return await transporter.sendMail(mailOptions)
+    
+    // use resend
+    return await transporter.emails.send(mailOptions)
+  } catch (error) {
+    throw new Error('Gagal mengirim email tanda terima: ' + error.message)
   }
-  return await transporter.sendMail(mailOptions)
 }

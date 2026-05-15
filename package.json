@@ -25,6 +25,7 @@
     "multer": "^2.0.2",
     "mysql2": "^3.14.3",
     "nodemailer": "^8.0.7",
+    "resend": "^6.12.3",
     "sequelize": "^6.37.7",
     "uuid-int": "^3.1.0",
     "validatorjs": "^3.22.1"

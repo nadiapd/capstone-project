@@ -1,6 +1,10 @@
-// const dns = require('dns')
-// dns.setDefaultResultOrder('ipv4first')
-const nodemailer = require('nodemailer')
+const { Resend } = require('resend')
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+module.exports = resend
+
+/* const nodemailer = require('nodemailer')
 
 const transporter = nodemailer.createTransport({
   // Outlook
@@ -33,9 +37,10 @@ const transporter = nodemailer.createTransport({
   //   rejectUnauthorized: false,
   //   family: 4
   // }
+
   host: '74.125.24.108',
   port: 587,
-  secure: false,
+  secure: false, //port 465, secure true
   requireTLS: true,
 
   auth: {
@@ -44,7 +49,7 @@ const transporter = nodemailer.createTransport({
   },
 
   tls: {
-    servername: 'smtp.gmail.com'
+    servername: 'smtp.gmail.com',
   }
 })
 
@@ -57,3 +62,5 @@ transporter.verify((error, success) => {
 })
 
 module.exports = transporter
+
+*/
