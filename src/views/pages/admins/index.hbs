@@ -15,7 +15,7 @@
         <thead>
           <tr class="bg-slate-50/50 border-b border-slate-100">
             <th class="px-8 py-5">
-              <a href="/services?{{#if query.q}}q={{query.q}}&{{/if}}sortBy=name&sortOrder={{#if (eq query.sortOrder 'ASC')}}DESC{{else}}ASC{{/if}}"
+              <a href="/admins?{{#if query.q}}q={{query.q}}&{{/if}}sortBy=name&sortOrder={{#if (eq query.sortOrder 'ASC')}}DESC{{else}}ASC{{/if}}"
                 class="flex items-center text-xs uppercase tracking-widest hover:text-blue-600 whitespace-nowrap 
                 {{#if (eq query.sortBy 'name')}}text-slate-900 font-black{{else}}text-slate-400 font-bold{{/if}}">
                 Nama {{#if (eq query.sortBy 'name')}}{{#if (eq query.sortOrder
@@ -54,7 +54,7 @@
             <td class="px-8 py-5 whitespace-nowrap text-right text-sm">
               <div class="flex justify-end gap-2">
                 <button
-                  onclick="openAdminModal('edit', {id: '{{this.id}}', name: '{{this.name}}', email: '{{this.email}}', phone: '{{this.phone}}'})"
+                  onclick="openAdminModal('edit', {id: '{{this.id}}', name: '{{this.name}}', email: '{{this.email}}'})"
                   class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
                   title="Edit Pelanggan">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,18 +63,14 @@
                     </path>
                   </svg>
                 </button>
-                {{!-- <form action="/admins/{{this.id}}/delete" method="POST" class="inline"
-                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus pelanggan ini?')">
-                  <button type="submit"
-                    class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                    title="Hapus">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                      </path>
-                    </svg>
-                  </button>
-                </form> --}}
+                <button onclick="openConfirmModal('/admins/{{this.id}}/delete')"
+                  class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Hapus">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                    </path>
+                  </svg>
+                </button>
               </div>
             </td>
           </tr>
@@ -94,7 +90,7 @@
   </div>
 </div>
 
-{{!-- MODAL ADD/EDIT CUSTOMER --}}
+{{!-- MODAL ADD/EDIT ADMIN --}}
 <div id="adminModal" class="fixed inset-0 z-[100] hidden">
   <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
   <div class="flex items-center justify-center min-h-screen p-4">
@@ -118,16 +114,17 @@
           <div>
             <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Nama Lengkap
               <span class="text-red-500">*</span></label>
-            <input type="text" name="name" id="cust_name" rules="required|min:3" fieldname="Nama Pelanggan"
-              placeholder="Nadia Putri"
-              class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
+            <input type="text" name="name" id="admin_name" rules="required|min:3" fieldname="Nama Admin"
+              placeholder="Nama admin"
+              class="w-full bg-white border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
           </div>
           <div>
             <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Email Aktif
               <span class="text-red-500">*</span></label>
-            <input type="email" name="email" id="cust_email" rules="required|email" fieldname="Email"
-              placeholder="nadia@example.com"
-              class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all">
+            <input type="email" name="email" id="admin_email" rules="required|email" fieldname="Email"
+              placeholder="email@example.com"
+              class="w-full bg-white border border-slate-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:bg-gray-100 disabled:pointer-events-none disabled:opacity-80">
+            <input type="hidden" name="email" id="hidden_admin_email">
           </div>
         </div>
         <div class="mt-8 flex gap-3">
@@ -141,6 +138,41 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+<div id="confirmModal" class="fixed inset-0 z-[100] hidden">
+  <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+  <div class="flex items-center justify-center min-h-screen p-4 text-center">
+    <div
+      class="relative bg-white w-full max-w-sm rounded-xl shadow-2xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300"
+      id="confirmModalContainer">
+      <div class="p-8">
+        <div
+          class="w-20 h-20 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-red-100">
+          <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+            </path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-2">Hapus Admin?</h3>
+        <p class="text-sm text-slate-500 font-medium leading-relaxed mb-8">
+          Tindakan ini tidak dapat dibatalkan. Apakah Anda yakin ingin menghapus data ini secara permanen?
+        </p>
+        <div class="flex flex-col gap-3">
+          <form id="deleteForm" method="POST">
+            <button type="submit"
+              class="w-full py-4 bg-red-600 hover:bg-red-700 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-xl shadow-red-200 transition-all transform hover:-translate-y-1">
+              Ya, Hapus Permanen
+            </button>
+          </form>
+          <button onclick="closeConfirmModal()"
+            class="w-full py-4 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl font-black text-xs uppercase tracking-widest transition-all">
+            Batalkan
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -161,15 +193,22 @@
     if (mode === 'edit' && data) {
       modalTitle.innerText = 'Update Data Admin';
       btnSubmit.innerText = 'Simpan Perubahan';
-      form.action = `/services/${data.id}/update`;
+      form.action = `/admins/${data.id}/update`;
 
-      document.getElementById('cust_name').value = data.name;
-      document.getElementById('cust_email').value = data.email;
-      document.getElementById('cust_phone').value = data.phone;
+      document.getElementById('admin_name').value = data.name;
+      document.getElementById('admin_email').value = data.email;
+      document.getElementById('hidden_admin_email').value = data.email;
+      const emailInput = document.getElementById('admin_email');
+      emailInput.value = data.email;
+      emailInput.disabled = true;
+      emailInput.classList.add('cursor-not-allowed');
     } else {
+      const emailInput = document.getElementById('admin_email');
+      emailInput.disabled = false;
+      emailInput.classList.remove('cursor-not-allowed');
       modalTitle.innerText = 'Tambah Admin';
       btnSubmit.innerText = 'Daftarkan Admin';
-      form.action = '/services/store';
+      form.action = '/admins/store';
       form.reset();
     }
 
@@ -185,6 +224,40 @@
     setTimeout(() => {
       modal.classList.add('hidden');
     }, 300);
+  }
+
+  function openConfirmModal(deleteUrl) {
+    const modal = document.getElementById('confirmModal');
+    const container = document.getElementById('confirmModalContainer');
+    const form = document.getElementById('deleteForm');
+
+    form.action = deleteUrl;
+
+    modal.classList.remove('hidden');
+
+    setTimeout(() => {
+      container.classList.remove('scale-95', 'opacity-0');
+      container.classList.add('scale-100', 'opacity-100');
+    }, 10);
+  }
+
+  function closeConfirmModal() {
+    const modal = document.getElementById('confirmModal');
+    const container = document.getElementById('confirmModalContainer');
+
+    container.classList.remove('scale-100', 'opacity-100');
+    container.classList.add('scale-95', 'opacity-0');
+
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 300);
+  }
+
+  window.onclick = function (event) {
+    const modal = document.getElementById('confirmModal');
+    if (event.target == modal.firstElementChild) {
+      closeConfirmModal();
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {

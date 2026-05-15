@@ -3,6 +3,7 @@ const Admin = require('./admin.service')
 const Render = require('../../helpers/render.helper')
 const Helper = require('./admin.helper')
 const SessionHelper = require('../../helpers/session.helper')
+const MailHelper = require('../../helpers/mail.helper')
 
 exports.indexPage = async (req, res) => {
   try {
@@ -37,149 +38,84 @@ exports.indexPage = async (req, res) => {
   }
 }
 
-exports.createPage = async (req, res) => {
-  try {
-    return Render.view(
-      res,
-      'pages/admins/create',
-      {
-        title: 'Create Admin',
-        layout: 'main'
-      }
-    )
-
-  } catch {
-    return Render.redirect(
-      res,
-      '/admins'
-    )
-  }
-}
-
 exports.store = async (req, res) => {
   try {
+    const rawPassword = Math.random().toString(36).slice(-8)
+    const body = {...req.body}
     const validation = Validation.store(req.body)
 
     if (validation.fails()) {
-      return Render.view(
-        res,
-        'pages/admins/create',
-        {
-          title: 'Create Admin',
-          layout: 'main',
-          errors: validation.errors.all(),
-          old: req.body
-        }
-      )
+      SessionHelper.setFlash(req, 'errors', validation.errors.all())
+      SessionHelper.setFlash(req, 'old', req.body)
+      return Render.redirect(res, '/admins')
     }
 
-    await Service.store(req.body)
+    body.password = rawPassword
 
+    await Admin.store(body)
+
+    await MailHelper.sendAdminWelcomeEmail(body.email, {
+      name: body.name,
+      email: body.email,
+      password: rawPassword,
+      login_url: `${process.env.APP_URL}/auth/login`
+    }).catch(err => console.error('Gagal kirim email admin:', err.message))
+    
+    SessionHelper.setFlash(req, 'success', 'Admin berhasil dibuat & password dikirim ke email.')
     return Render.redirect(
       res,
       '/admins'
     )
-
-  } catch {
-    return Render.view(
-      res,
-      'pages/admins/create',
-      {
-        title: 'Create Admin',
-        layout: 'main',
-        errors: validation.errors.all(),
-        old: req.body
-      }
-    )
-  }
-}
-
-exports.editPage = async (req, res) => {
-  try {
-    const admin = await Service.getById(req.params.id)
-
-    if (!admin) {
-      return Render.redirect(
-        res,
-        '/admins'
-      )
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
     }
-
-    return Render.view(
-      res,
-      'pages/admins/edit',
-      {
-        title: 'Edit Admin',
-        layout: 'main',
-        admin
-      }
-    )
-
-  } catch {
-    return Render.redirect(
-      res,
-      '/admins'
-    )
+    SessionHelper.setFlash(req, 'errors', systemError)
+    return Render.redirect(res, '/admins')
   }
 }
 
 exports.update = async (req, res) => {
   try {
+    console.log(req.body)
     const validation = Validation.update(req.body)
 
     if (validation.fails()) {
-      const admin = await Service.getById(req.params.id)
-
-      return Render.view(
-        res,
-        'pages/admins/edit',
-        {
-          title: 'Edit Admin',
-          layout: 'main',
-          errors: validation.errors.all(),
-          old: req.body,
-          admin
-        }
-      )
+      SessionHelper.setFlash(req, 'errors', validation.errors.all())
+      SessionHelper.setFlash(req, 'old', req.body)
+      return Render.redirect(res, '/admins')
     }
 
-    await Service.update(req.params.id, req.body)
+    await Admin.update(req.params.id, req.body)
 
+    SessionHelper.setFlash(req, 'success', 'Admin berhasil diedit.')
     return Render.redirect(
       res,
       '/admins'
     )
-
-  } catch {
-    const admin = await Service.getById(req.params.id)
-
-    return Render.view(
-      res,
-      'pages/admins/edit',
-      {
-        title: 'Edit Admin',
-        layout: 'main',
-        errors: validation.errors.all(),
-        old: req.body,
-        admin
-      }
-    )
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
+    return Render.redirect(res, '/admins')
   }
 }
 
 exports.delete = async (req, res) => {
   try {
-    await Service.delete(req.params.id)
+    await Admin.delete(req.params.id)
 
+    SessionHelper.setFlash(req, 'success', 'Admin berhasil dihapus.')
     return Render.redirect(
       res,
       '/admins'
     )
-
-  } catch {
-    return Render.redirect(
-      res,
-      '/admins'
-    )
+  } catch (err) {
+    const systemError = {
+      system: [err.message]
+    }
+    SessionHelper.setFlash(req, 'errors', systemError)
+    return Render.redirect(res, '/admins')
   }
 }

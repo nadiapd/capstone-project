@@ -102,3 +102,36 @@ exports.sendNewServiceNotification = async (customerEmail, serviceData) => {
     throw new Error('Gagal mengirim email tanda terima: ' + error.message)
   }
 }
+
+exports.sendAdminWelcomeEmail = async (targetEmail, data) => {
+  const mailOptions = {
+    from: `"TechService Admin" <${process.env.EMAIL_USER}>`,
+    to: targetEmail,
+    subject: '[AKSES ADMIN] Akun Baru TechService',
+    html: `
+      <div style="font-family: sans-serif; max-width: 500px; margin: auto; border: 1px solid #e2e8f0; border-radius: 20px; overflow: hidden;">
+        <div style="background-color: #2563eb; padding: 25px; text-align: center; color: white;">
+          <h2 style="margin: 0;">Selamat Datang!</h2>
+        </div>
+        <div style="padding: 30px; color: #1e293b;">
+          <p>Halo <b>${data.name}</b>,</p>
+          <p>Akun administrator Anda telah berhasil dibuat. Gunakan kredensial di bawah ini untuk masuk ke dashboard:</p>
+          
+          <div style="background-color: #f8fafc; padding: 20px; border-radius: 15px; margin: 20px 0; border: 1px solid #e2e8f0;">
+            <p style="margin: 0 0 10px 0; font-size: 14px;"><b>Email:</b> ${data.email}</p>
+            <p style="margin: 0; font-size: 14px;"><b>Password:</b> <code style="background: #eee; padding: 2px 6px; border-radius: 4px;">${data.password}</code></p>
+          </div>
+
+          <p style="font-size: 13px; color: #64748b; line-height: 1.6;">
+            Demi keamanan, segera ganti password Anda setelah berhasil masuk melalui menu <b>Ganti Password</b>.
+          </p>
+
+          <div style="text-align: center; margin-top: 30px;">
+            <a href="${data.login_url}" style="background-color: #2563eb; color: white; padding: 12px 25px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 14px;">MASUK KE DASHBOARD</a>
+          </div>
+        </div>
+      </div>
+    `
+  }
+  return await transporter.sendMail(mailOptions)
+}

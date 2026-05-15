@@ -7,7 +7,6 @@ const getAdmins = admins => {
     obj.id = admin.id
     obj.name = admin.name
     obj.email = admin.email
-    obj.phone = admin.phone
     obj.created_at = admin.createdAt
 
     result[index] = obj
@@ -25,7 +24,6 @@ const getAdmin = admin => {
     id: admin.id,
     name: admin.name,
     email: admin.email,
-    phone: admin.phone,
     created_at: admin.createdAt
   }
 }
