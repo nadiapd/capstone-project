@@ -16,6 +16,11 @@ const {
 const routes = require('./routes')
 
 const app = express()
+const dns = require('dns')
+
+dns.lookup('smtp.gmail.com', (err, address) => {
+  console.log('LOG: ', err || address)
+})
 
 // Handlebars Engine
 app.engine(
