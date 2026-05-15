@@ -37,12 +37,14 @@ app.engine(
         const datePart = date.toLocaleDateString('id-ID', {
           day: 'numeric',
           month: 'long',
-          year: 'numeric'
+          year: 'numeric',
+          timeZone: 'Asia/Jakarta'
         })
         const timePart = date.toLocaleTimeString('id-ID', {
           hour: '2-digit',
           minute: '2-digit',
-          hour12: false
+          hour12: false,
+          timeZone: 'Asia/Jakarta'
         }).replace(/\./g, ':')
 
         return `${datePart}, ${timePart}`
