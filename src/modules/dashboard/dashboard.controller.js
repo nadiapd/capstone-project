@@ -12,6 +12,7 @@ exports.indexPage = async (req, res) => {
         title: 'Dashboard',
         layout: 'main',
         adminName: req.admin.name,
+        now: new Date(),
         ...analytics
       }
     )

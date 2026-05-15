@@ -7,7 +7,6 @@ const MailHelper = require('../../helpers/mail.helper')
 
 exports.indexPage = async (req, res) => {
   try {
-    console.log(req.admin)
     const filters = req.query || {}
 
     const admins = await Admin.getAll(filters)

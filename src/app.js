@@ -80,6 +80,10 @@ app.engine(
           minimumFractionDigits: 0,
           maximumFractionDigits: 0
         }).format(amount).replace(/\s/g, '')
+      },
+
+      json(context) {
+        return JSON.stringify(context)
       }
     }
   })
