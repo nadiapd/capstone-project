@@ -42,11 +42,16 @@ exports.store = async (req, res) => {
   try {
     const rawPassword = Math.random().toString(36).slice(-8)
     const body = {...req.body}
-    const validation = Validation.store(req.body)
+    
+    if (typeof body.email === 'object') {
+      body.email = body.email[0]
+    }
+
+    const validation = Validation.store(body)
 
     if (validation.fails()) {
       SessionHelper.setFlash(req, 'errors', validation.errors.all())
-      SessionHelper.setFlash(req, 'old', req.body)
+      SessionHelper.setFlash(req, 'old', body)
       return Render.redirect(res, '/admins')
     }
 
