@@ -210,7 +210,7 @@
               </h4>
               <div class="col-span-2 md:col-span-1">
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Cari /
-                  Tambah Nama</label>
+                  Tambah Nama<span class="text-red-500">*</span></label>
                 <select rules="required" id="customer-select" name="customer_id" placeholder="Cari nama..."
                   autocomplete="off" fieldname="Nama Pelanggan">
                   <option value="">Cari nama atau tambah baru...</option>
@@ -224,7 +224,7 @@
 
               <div class="col-span-2 md:col-span-1">
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Email
-                  Pelanggan</label>
+                  Pelanggan<span class="text-red-500">*</span></label>
                 <input type="email" id="customer_email" name="customer_email" rules="required|email" fieldname="Email"
                   placeholder="contoh@mail.com"
                   class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:bg-gray-100 disabled:pointer-events-none disabled:opacity-80">
@@ -232,7 +232,7 @@
 
               <div class="col-span-2">
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">No.
-                  WhatsApp</label>
+                  WhatsApp<span class="text-red-500">*</span></label>
                 <input type="text" id="customer_phone" name="customer_phone" rules="required|phone" fieldname="Nomor WA"
                   placeholder="0812..."
                   class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all disabled:bg-gray-100 disabled:pointer-events-none disabled:opacity-80">
@@ -241,7 +241,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <h4
                 class="md:col-span-2 text-[10px] font-black text-blue-600 uppercase tracking-widest border-b border-slate-100 pb-2">
-                Informasi Perangkat</h4>
+                Informasi Perangkat<span class="text-red-500">*</span></h4>
               <div class="flex flex-col">
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Merk &
                   Tipe</label>
@@ -251,7 +251,7 @@
               </div>
               <div class="flex flex-col">
                 <label
-                  class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Kategori</label>
+                  class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Kategori<span class="text-red-500">*</span></label>
                 <select name="device_category"
                   class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 h-[42px] text-sm outline-none">
                   <option value="laptop">Laptop</option>
@@ -262,14 +262,14 @@
               </div>
               <div class="md:col-span-2">
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Deskripsi
-                  Kerusakan</label>
+                  Kerusakan<span class="text-red-500">*</span></label>
                 <textarea name="note" rules="required|min:10" fieldname="Deskripsi" rows="3"
                   placeholder="Jelaskan detail kerusakan unit di sini..."
                   class="w-full bg-white border border-slate-100 rounded-lg px-4 py-2.5 text-sm focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none transition-all resize-none"></textarea>
               </div>
               <div class="md:col-span-2">
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Estimasi
-                  Biaya (Rp)</label>
+                  Biaya (Rp)<span class="text-red-500">*</span></label>
                 <div class="flex gap-2 items-center group relative">
                   <span
                     class="top-2.5 absolute z-[1] pl-4 text-slate-400 font-bold text-sm group-focus-within:text-blue-600 transition-colors">Rp</span>
