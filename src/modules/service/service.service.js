@@ -44,7 +44,6 @@ exports.getAll = async (filters = {}) => {
   if (filters.q && filters.q !== '') {
     whereCondition[Op.or] = [
       { tracking_code: { [Op.like]: `%${filters.q}%` } },
-      { device_brand: { [Op.like]: `%${filters.q}%` } },
       { '$customer.name$': { [Op.like]: `%${filters.q}%` } }
     ]
   }
