@@ -89,16 +89,35 @@ http://localhost:3000
 # 📁 Struktur Folder
 
 ```bash
+├── bin/
+│   └── www                 # Entry point utama untuk menjalankan server Node.js
 ├── src/
-│   ├── config/          # Konfigurasi database & Sequelize
-│   ├── controllers/     # Logika aplikasi (Service, Customer, Dashboard, dll)
-│   ├── helpers/         # Fungsi pembantu (Tracking code, Response. Render)
-│   ├── public/
-│   │   ├── css/         # Styling (Tailwind/Custom)
-│   │   └── js/          # Script client-side (Validator.js, TomSelect init)
-│   ├── routes/          # Definisi URL/Routing
-│   ├── validation/      # Logic backend validatorjs
-│   └── views/           # Template engine Handlebars (.hbs)
-├── app.js               # Entry point aplikasi
-└── .env                 # File rahasia konfigurasi
+│   ├── config/             # Konfigurasi database & Sequelize
+│   ├── helpers/            # Fungsi pembantu global (utility functions)
+│   ├── middlewares/        # Middleware Express (misal: validasi auth/session)
+│   ├── modules/            # Logika utama aplikasi (Dikelompokkan per-fitur/modul)
+│   │   ├── admin/
+│   │   ├── auth/
+│   │   ├── customer/
+│   │   ├── dashboard/
+│   │   ├── profile/
+│   │   ├── service/        # Contoh struktur komponen di dalam satu modul:
+│   │   │   ├── service.controller.js # Pintu gerbang utama yang ngatur request & response (render .hbs / kirim JSON)
+│   │   │   ├── service.helper.js     # Fungsi pembantu lokal khusus modul ini (misal: format status)
+│   │   │   ├── service.model.js      # Definisi tabel database (Sequelize model) untuk modul ini
+│   │   │   ├── service.route.js      # Daftar URL / Endpoint khusus untuk modul ini
+│   │   │   ├── service.service.js    # Tempat query database berat (pemisah antara controller dan model)
+│   │   │   └── service.validation.js # Validasi input form data sebelum masuk ke controller
+│   │   ├── service_history/
+│   │   └── tracking/
+│   ├── public/             # Aset statis frontend (CSS, JS client-side, gambar, favicon)
+│   ├── routes/             # Routing sentral / penggabung route antar modul
+│   ├── views/              # Template engine Handlebars (.hbs)
+│   │   ├── errors/         # Halaman error (404, 500)
+│   │   ├── layouts/        # Layout utama (auth, main, public)
+│   │   └── pages/          # View/halaman spesifik berdasarkan modul
+│   └── app.js              # Setup utama Express, middleware, & konfigurasi hbs
+├── .env                    # File konfigurasi environment variable (rahasia)
+├── package.json            # File manifest project & daftar dependensi npm
+└── seed-admin.js           # Script untuk mengisi data awal (seeding) database
 ```
