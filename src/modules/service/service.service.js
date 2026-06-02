@@ -116,7 +116,23 @@ exports.store = async (payload, admin) => {
   }
 
   payload.customer_id = customer.id
-  payload.tracking_code = TrackingHelper.generateTrackingCode()
+
+  const startOfToday = new Date()
+  startOfToday.setHours(0, 0, 0, 0)
+
+  const endOfToday = new Date()
+  endOfToday.setHours(23, 59, 59, 999)
+
+  const countToday = await Model.count({
+    where: {
+      createdAt: {
+        [Op.between]: [startOfToday, endOfToday]
+      }
+    }
+  })
+
+  payload.tracking_code = TrackingHelper.generateTrackingCode(countToday)
+  // payload.tracking_code = TrackingHelper.generateTrackingCode()
   payload.status = 1 // Status: Baru
 
   const cleanPayload = { ...payload }
